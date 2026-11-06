@@ -118,3 +118,18 @@ test('github: 404 stays not-found', async () => {
   const r = await loadRepo('a', 'b', { fetchImpl: async () => new Response('', { status: 404 }) });
   assert.equal(r.error, 'not-found');
 });
+
+test('repo input: accepts owner/repo and every pasted GitHub URL shape', async () => {
+  const { parseRepoInput: p } = await import('../src/repo-input.js');
+  for (const v of ['flisk-sh/flisk', ' flisk-sh/flisk ', 'github.com/flisk-sh/flisk', 'https://github.com/flisk-sh/flisk/', 'https://www.github.com/flisk-sh/flisk.git', 'https://github.com/flisk-sh/flisk/tree/main/docs?x=1#y', 'git@github.com:flisk-sh/flisk.git']) {
+    assert.equal(p(v), 'flisk-sh/flisk', v);
+  }
+  for (const v of ['', 'flisk', 'https://github.com/', '../x', 'a b/c', null, undefined, 'https://example.com/a/b/c<']) assert.equal(p(v), '', String(v));
+});
+
+test('page: ships the parser to the browser and never builds a double URL', async () => {
+  const { page } = await import('../src/page.js');
+  const html = page('https://diagram.flisk.si');
+  assert.match(html, /function parseRepoInput/);
+  assert.match(html, /'https:\/\/diagram\.flisk\.si\/'\+repo\+'\.svg'/);
+});
