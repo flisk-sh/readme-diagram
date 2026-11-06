@@ -220,3 +220,12 @@ test('model: sponsor and generic headings do not become sections', () => {
   const m = buildModel('# X\n\nA tagline that is long enough to count.\n\n## Gold Sponsors\n## Community\n## Real Feature\n');
   assert.deepEqual(m.inside, ['Real Feature']);
 });
+
+test('commands: shown whole or not at all, and never twice', () => {
+  const md = '# T\n\nA project long enough to have a tagline here.\n\n```bash\nnpm install\nuv add "fastapi[standard]" --extra-index-url https://example.com/simple\nnpm run dev\n```\n';
+  const svg = renderSvg(buildModel(md, [], 'o/t'));
+  assert.ok(!svg.includes('…') || !/\$<\/tspan> uv add/.test(svg), 'no half command');
+  assert.ok(!svg.includes('extra-index-url'));
+  const shown = [...svg.matchAll(/<tspan>\$<\/tspan> ([^<]+)/g)].map((m) => m[1]);
+  assert.equal(new Set(shown).size, shown.length, `repeated: ${shown}`);
+});

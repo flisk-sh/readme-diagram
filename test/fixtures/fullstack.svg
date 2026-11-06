@@ -70,8 +70,8 @@
     @keyframes m3 { from { transform: translateX(-161.2px); } to { transform: translateX(0px); } }
     .stack { opacity: 0; animation: stack 4s linear infinite; }
     @keyframes stack { 0% { opacity: 0; transform: translateY(6px); } 7.5% { opacity: 1; transform: translateY(0); } 42.5% { opacity: 1; transform: translateY(0); } 50%, 100% { opacity: 0; transform: translateY(-6px); } }
-    .out { animation: out 6s linear infinite; }
-    @keyframes out { 0% { opacity: 0; } 3.7% { opacity: 1; } 22.5% { opacity: 1; } 27.5%, 100% { opacity: 0; } }
+    .out { animation: out 3s linear infinite; }
+    @keyframes out { 0% { opacity: 0; } 7.3% { opacity: 1; } 45% { opacity: 1; } 55%, 100% { opacity: 0; } }
     @media (prefers-color-scheme: dark) {
       text { fill: #e6edf3; }
       .card { fill: #161b22; stroke: #30363d; }
@@ -172,23 +172,16 @@
 
   <rect class="card" x="738" y="10" width="160" height="380" rx="12"/>
   <text class="num" x="752" y="32">03</text><text class="kick" x="774" y="32">RUN</text>
-  <text class="head" x="752" y="53">do this</text>
-  <text class="sub" x="752" y="74">2 commands</text>
-  <rect class="slot" x="750" y="82" width="136" height="36" rx="6"/>
-  <rect class="lit out" style="animation-delay:0s" x="750" y="82" width="136" height="36" rx="6"/>
-  <text class="file" x="758" y="98">docker compose…</text>
-  <text class="host" x="758" y="111">→ step 1</text>
-  <rect class="slot" x="750" y="125" width="136" height="36" rx="6"/>
-  <rect class="lit out" style="animation-delay:1.5s" x="750" y="125" width="136" height="36" rx="6"/>
-  <text class="file" x="758" y="141">npm install</text>
-  <text class="host" x="758" y="154">→ step 2</text>
-  <text class="sub" x="752" y="182">2 sections</text>
-  <rect class="slot" x="750" y="190" width="136" height="22" rx="6"/>
-  <rect class="lit out" style="animation-delay:3s" x="750" y="190" width="136" height="22" rx="6"/>
-  <text class="file" style="font-size:11.5px" x="758" y="205">Quick start</text>
-  <rect class="slot" x="750" y="217" width="136" height="22" rx="6"/>
-  <rect class="lit out" style="animation-delay:4.5s" x="750" y="217" width="136" height="22" rx="6"/>
-  <text class="file" style="font-size:11.5px" x="758" y="232">Stack</text>
+  <text class="head" x="752" y="53">it covers</text>
+  <text class="sub" x="752" y="74">2 sections</text>
+  
+  
+  <rect class="slot" x="750" y="82" width="136" height="22" rx="6"/>
+  <rect class="lit out" style="animation-delay:0s" x="750" y="82" width="136" height="22" rx="6"/>
+  <text class="file" style="font-size:11.5px" x="758" y="97">Quick start</text>
+  <rect class="slot" x="750" y="109" width="136" height="22" rx="6"/>
+  <rect class="lit out" style="animation-delay:1.5s" x="750" y="109" width="136" height="22" rx="6"/>
+  <text class="file" style="font-size:11.5px" x="758" y="124">Stack</text>
   <text class="note" x="752" y="356">straight from the README</text>
 
   <circle class="flow" cx="903" cy="200" r="2.3"/><circle class="flow f2" cx="903" cy="200" r="2.3"/><circle class="flow f3" cx="903" cy="200" r="2.3"/>

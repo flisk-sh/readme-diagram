@@ -7,7 +7,7 @@ import { ICON, page, resultPage } from './page.js';
 const SVG = { 'content-type': 'image/svg+xml; charset=utf-8', 'cache-control': 'public, max-age=3600, s-maxage=86400', 'access-control-allow-origin': '*' };
 
 // Bump when the renderer changes: it is part of the edge-cache key, so old diagrams are not served for a day.
-export const RENDER_VERSION = '6';
+export const RENDER_VERSION = '7';
 
 export default {
   async fetch(request, env = {}, ctx) {

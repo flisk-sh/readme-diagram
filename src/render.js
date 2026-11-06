@@ -94,8 +94,22 @@ function radar(tags, cx, cy, R) {
   return out.join('\n  ');
 }
 
+// Commands are shown whole or not at all: a half command is wrong. Each one appears once.
+function pickCommands(model) {
+  const used = new Set();
+  const take = (max, n = 1) => {
+    const got = model.commands.filter((c) => c.length <= max && !used.has(c)).slice(0, n);
+    got.forEach((c) => used.add(c));
+    return got;
+  };
+  const clone = model.slug && model.slug.includes('/') ? `gh repo clone ${model.slug}` : '';
+  const first = take(24)[0] || (clone.length <= 24 ? clone : '');
+  return { first, hero: take(36)[0] || '', slots: take(15, 2), radar: take(14)[0] || '' };
+}
+
 export function renderSvg(model) {
   const title = esc(clip(model.title, 40));
+  const pick = pickCommands(model);
   const css = [];
 
   // 01 READS
@@ -112,7 +126,7 @@ export function renderSvg(model) {
   <text class="file" x="32" y="${y + 17}">${esc(clip(f, 18))}</text>
   <text class="tick from" style="${dl}" x="182" y="${y + 17}">✓</text>`;
   });
-  const cmd0 = model.commands[0] ? clip(model.commands[0], 24) : model.slug && model.slug.includes('/') ? clip(`gh repo clone ${model.slug}`, 24) : '';
+  const cmd0 = pick.first;
 
   // 02 hero
   const shown = model.rows.slice(0, 5);
@@ -127,7 +141,7 @@ export function renderSvg(model) {
   const tagline = model.tagline ? clip(model.tagline, 40) : `${model.sections} sections`;
 
   // 03 RUN
-  const cmds = model.commands.slice(0, 2);
+  const cmds = pick.slots;
   const cmdWalk = walk('out', cmds.length + model.inside.slice(0, 5).length, 1.5);
   css.push(cmdWalk.css);
   const cmdEls = cmds.map((c, i) => {
@@ -135,7 +149,7 @@ export function renderSvg(model) {
     const dl = `animation-delay:${r1(i * 1.5)}s`;
     return `<rect class="slot" x="750" y="${y}" width="136" height="36" rx="6"/>
   <rect class="lit out" style="${dl}" x="750" y="${y}" width="136" height="36" rx="6"/>
-  <text class="file" x="758" y="${y + 16}">${esc(clip(c, 15))}</text>
+  <text class="file" x="758" y="${y + 16}">${esc(c)}</text>
   <text class="host" x="758" y="${y + 29}">→ step ${i + 1}</text>`;
   });
   const secs = model.inside.slice(0, 5);
@@ -234,7 +248,7 @@ export function renderSvg(model) {
   <text class="head" x="266" y="53">${esc(tagline)}<tspan class="cursor"> _</tspan></text>
   ${bigs.join('\n  ')}
   ${rows.map((r) => r.svg).join('\n  ')}
-  <text class="cmd" x="242" y="376">${model.commands[1] || model.commands[0] ? `<tspan>$</tspan> ${esc(clip(model.commands[1] || model.commands[0], 36))}` : ''}<tspan>${model.commands[1] || model.commands[0] ? ' · ' : ''}${model.sections} sections · ${model.blocks} blocks</tspan></text>
+  <text class="cmd" x="242" y="376">${pick.hero ? `<tspan>$</tspan> ${esc(pick.hero)}` : ''}<tspan>${pick.hero ? ' · ' : ''}${model.sections} sections · ${model.blocks} blocks</tspan></text>
   <circle class="flow" cx="723" cy="200" r="2.3"/><circle class="flow f2" cx="723" cy="200" r="2.3"/><circle class="flow f3" cx="723" cy="200" r="2.3"/>
 
   <rect class="card" x="738" y="10" width="160" height="380" rx="12"/>
@@ -261,7 +275,7 @@ export function renderSvg(model) {
   <circle class="ok" cx="934" cy="333" r="3.5"/>
   <text class="note" x="944" y="336">${tags.length} part${tags.length === 1 ? '' : 's'} found</text>
   <text class="note" x="930" y="354">stack · files · docs</text>
-  ${model.commands[2] ? `<text class="cmd" x="930" y="376"><tspan>$</tspan> ${esc(clip(model.commands[2], 14))}</text>` : ''}
+  ${pick.radar ? `<text class="cmd" x="930" y="376"><tspan>$</tspan> ${esc(pick.radar)}</text>` : ''}
 </svg>
 `;
 }
