@@ -99,3 +99,22 @@ test('render: long tagline is clipped to fit the hero card', () => {
   const head = svg.match(/class="head" x="266" y="53">([^<]*)</)[1];
   assert.ok(head.length <= 46, head);
 });
+
+test('github: falls back to raw.githubusercontent when the API is rate-limited', async () => {
+  const { loadRepo } = await import('../src/github.js');
+  const calls = [];
+  const fetchImpl = async (u) => {
+    calls.push(u);
+    if (u.startsWith('https://api.github.com')) return new Response('limit', { status: 403 });
+    return new Response('# Hi\n', { status: 200 });
+  };
+  const r = await loadRepo('a', 'b', { fetchImpl });
+  assert.equal(r.readme, '# Hi\n');
+  assert.ok(calls.some((u) => u.includes('raw.githubusercontent.com/a/b/HEAD/README.md')));
+});
+
+test('github: 404 stays not-found', async () => {
+  const { loadRepo } = await import('../src/github.js');
+  const r = await loadRepo('a', 'b', { fetchImpl: async () => new Response('', { status: 404 }) });
+  assert.equal(r.error, 'not-found');
+});
