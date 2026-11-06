@@ -27,6 +27,12 @@ export async function loadRepo(owner, repo, { fetchImpl = fetch, token } = {}) {
     }
     if (!raw) return { error: 'not-found', status: 404 };
     readme = await raw.text();
+    // A symlinked README comes back from raw as just the target path: follow it (up to twice).
+    for (let hop = 0; hop < 2 && /^[\w./-]{1,200}\.(md|markdown|rst|txt)\s*$/i.test(readme); hop++) {
+      const next = await fetchImpl(`https://raw.githubusercontent.com/${owner}/${repo}/HEAD/${readme.trim().replace(/^\.\//, '')}`, { headers: { 'user-agent': 'readme-diagram' } });
+      if (!next.ok) break;
+      readme = await next.text();
+    }
   }
   if (readme.length > 400_000) return { error: 'too-large' };
   let files = [];

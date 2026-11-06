@@ -258,3 +258,15 @@ test('github: reads package.json when the repo has one, ignores a broken one', a
   assert.deepEqual((await loadRepo('a', 'b', { fetchImpl: mk('{"scripts":{"dev":"x"}}') })).pkg, { scripts: { dev: 'x' } });
   assert.equal((await loadRepo('a', 'b', { fetchImpl: mk('{not json') })).pkg, null);
 });
+
+test('github: follows a symlinked README that raw returns as a bare path', async () => {
+  const { loadRepo } = await import('../src/github.js');
+  const fetchImpl = async (u) => {
+    if (u.startsWith('https://api.github.com')) return new Response('', { status: 403 });
+    if (u.endsWith('/HEAD/README.md')) return new Response('', { status: 404 });
+    if (u.endsWith('/HEAD/readme.md')) return new Response('packages/next/README.md');
+    if (u.endsWith('/HEAD/packages/next/README.md')) return new Response('# Real\n\nThe real readme.\n');
+    return new Response('', { status: 404 });
+  };
+  assert.match((await loadRepo('a', 'b', { fetchImpl })).readme, /# Real/);
+});
