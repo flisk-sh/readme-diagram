@@ -284,3 +284,11 @@ test('github: without the API, manifest files are probed on raw', async () => {
   assert.deepEqual(r.files.sort(), ['package.json', 'pnpm-lock.yaml']);
   assert.deepEqual(r.pkg, { scripts: { dev: 'x' } });
 });
+
+test('result page: the edit button copies the snippet and the steps say where to paste', async () => {
+  const { resultPage } = await import('../src/page.js');
+  const html = resultPage('https://diagram.flisk.si', 'flisk-sh/helpdock', 'https://github.com/flisk-sh/helpdock/edit/main/README.md');
+  assert.match(html, /id="edit"[^>]*href="https:\/\/github\.com\/flisk-sh\/helpdock\/edit\/main\/README\.md"/);
+  assert.match(html, /getElementById\('edit'\)\.addEventListener\('click'/);
+  assert.match(html, /Ctrl\+V/);
+});

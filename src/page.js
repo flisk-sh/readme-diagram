@@ -24,7 +24,7 @@ form.repo{display:flex;gap:10px;max-width:620px;margin:0 auto;background:rgba(25
 form.repo input{flex:1;min-width:0;background:transparent;border:0;color:var(--fg);font:15px var(--mono);padding:11px 14px}form.repo input:focus{outline:none}
 form.repo:focus-within{border-color:#5ee0a0}
 button,a.btn{font:inherit;font-weight:650;padding:12px 22px;border:0;border-radius:10px;background:linear-gradient(135deg,#1f9d6b,#16805a);color:#fff;cursor:pointer;text-decoration:none;display:inline-block;box-shadow:0 8px 24px -10px rgba(31,157,107,.8)}
-button:hover,a.btn:hover{filter:brightness(1.1)}a.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--fg);box-shadow:none}
+button:hover,a.btn:hover{filter:brightness(1.1)}button.ghostbtn,a.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--fg);box-shadow:none}
 .chips{margin:18px 0 0;font-size:13px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .chip{text-decoration:none;color:var(--fg);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:4px 12px;background:rgba(255,255,255,.05);font-family:var(--mono)}.chip:hover{border-color:var(--accent)}
 .reassure{margin:14px 0 0;font-size:13px;color:var(--muted)}.reassure b{color:var(--accent)}
@@ -103,14 +103,15 @@ export function resultPage(origin, repo, editUrl) {
 <p class="lede">Your diagram is ready. Copy the snippet to the top of the README.</p>
 <p id="err" class="error" role="alert" hidden>Could not load a README for ${esc(repo)}. Is the repo public and does it have a README?</p>
 <div class="shot"><img id="img" src="${esc(u)}" alt="Diagram of ${esc(repo)}" width="1080" height="400"></div>
-<div class="row"><button id="copy" type="button">Copy README snippet</button><a class="btn ghost" href="${esc(edit)}" target="_blank" rel="noopener">Open README on GitHub</a></div>
-<p class="steps">On GitHub: paste the snippet at the top, then Propose changes. GitHub forks the repo for you if it is not yours.</p>
+<div class="row"><button id="copy" type="button" class="ghostbtn">Copy README snippet</button><a id="edit" class="btn" href="${esc(edit)}" target="_blank" rel="noopener">Copy snippet and open README on GitHub</a></div>
+<p class="steps" id="steps"><b>1.</b> Click the green button: it copies the snippet and opens the README editor. <b>2.</b> Click in the editor, press Ctrl+V (⌘V on Mac) at the very top. <b>3.</b> Click <b>Commit changes</b>, then <b>Propose changes</b>. GitHub forks the repo for you if it is not yours.</p>
 <pre id="snip">${esc(snippet)}</pre>
 <p class="row"><a class="btn ghost" href="/">Another repo</a></p>
 </div></section></main>
 <script>
 const s=${JSON.stringify(snippet).replace(/</g, '\\u003c')},c=document.getElementById('copy');
 c.onclick=()=>navigator.clipboard.writeText(s).then(()=>{c.textContent='Copied';setTimeout(()=>c.textContent='Copy README snippet',1500)});
+document.getElementById('edit').addEventListener('click',()=>{navigator.clipboard.writeText(s).then(()=>{document.getElementById('steps').insertAdjacentHTML('beforebegin','<p class="reassure"><b>●</b> Snippet copied. Paste it at the top of the README.</p>')})});
 document.getElementById('img').onerror=()=>{document.getElementById('err').hidden=false;document.getElementById('img').parentNode.hidden=true};
 </script>`,
   });
