@@ -1,0 +1,11 @@
+name = "readme-diagram"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# Custom domain: uncomment once the flisk.si zone is on the Cloudflare account that deploys this Worker.
+# routes = [{ pattern = "diagram.flisk.si", custom_domain = true }]
+
+[vars]
+PUBLIC_ORIGIN = "https://diagram.flisk.si"
+
+# Optional secret (raises the GitHub API rate limit): `wrangler secret put GITHUB_TOKEN`

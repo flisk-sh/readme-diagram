@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="400" viewBox="0 0 1080 400" role="img" aria-labelledby="t d">
+  <title id="t">Shop</title>
+  <desc id="d">Shop: 12 building blocks across languages, frameworks, services, sections.</desc>
+  <defs>
+    <linearGradient id="bolt" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0" stop-color="#5ee0a0"/><stop offset="1" stop-color="#1f9d6b"/></linearGradient>
+    <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ee0a0"/><stop offset=".5" stop-color="#1f9d6b" stop-opacity=".35"/><stop offset="1" stop-color="#5ee0a0"/><animateTransform attributeName="gradientTransform" type="rotate" from="0 .5 .5" to="360 .5 .5" dur="6s" repeatCount="indefinite"/></linearGradient>
+    <radialGradient id="glow" cx="50%" cy="0%" r="90%"><stop offset="0" stop-color="#5ee0a0" stop-opacity=".16"/><stop offset="1" stop-color="#5ee0a0" stop-opacity="0"/></radialGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".08" stop-color="#fff"/><stop offset=".92" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <mask id="fade" maskUnits="userSpaceOnUse" x="406" y="0" width="306" height="400"><rect x="406" y="0" width="306" height="400" fill="url(#edge)"/></mask>
+  </defs>
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #24292f; }
+    .card { fill: #f6f8fa; stroke: #d0d7de; }
+    .hero { fill: #fff; stroke: url(#hero); stroke-width: 1.6; }
+    .kick { font-size: 10.5px; font-weight: 700; letter-spacing: 1.6px; fill: #1f9d6b; }
+    .num { font-size: 10.5px; font-weight: 700; fill: #8c959f; }
+    .head { font-size: 15px; font-weight: 700; }
+    .sub, .what { font-size: 10.5px; fill: #6e7781; }
+    .count { font-size: 21px; font-weight: 800; fill: #1f9d6b; }
+    .file { font-size: 12px; font-weight: 600; }
+    .dollar, .tick { fill: #1f9d6b; }
+    .lang rect, .slot, .chip rect { fill: #fff; stroke: #d0d7de; }
+    .lang text, .chip text { font-size: 11px; }
+    .lit { fill: #5ee0a0; fill-opacity: .25; stroke: #1f9d6b; opacity: 0; }
+    .bring { animation: bring 8s linear infinite; }
+    .from, .out { animation: bring 10s linear infinite; }
+    .tick { opacity: 0; font-size: 12px; }
+    @keyframes bring { 0% { opacity: 0; } 4% { opacity: 1; } 16% { opacity: 1; } 22%, 100% { opacity: 0; } }
+    .flow { fill: #1f9d6b; opacity: 0; animation: flow 1.2s linear infinite; }
+    .f2 { animation-delay: .4s; } .f3 { animation-delay: .8s; }
+    @keyframes flow { 0% { opacity: 0; transform: translateX(0); } 25%, 75% { opacity: 1; } 100% { opacity: 0; transform: translateX(14px); } }
+    .core { animation: pulse 1.5s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+    @keyframes pulse { from { transform: scale(.9); } to { transform: scale(1.1); } }
+    .cursor { animation: blink 1s steps(1, end) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .m0 { animation: m0 8.0s linear infinite; }
+    @keyframes m0 { from { transform: translateX(0px); } to { transform: translateX(-249.7px); } }
+    .m1 { animation: m1 8.0s linear infinite; }
+    @keyframes m1 { from { transform: translateX(-180.3px); } to { transform: translateX(0px); } }
+    .m2 { animation: m2 8.0s linear infinite; }
+    @keyframes m2 { from { transform: translateX(0px); } to { transform: translateX(-272.8px); } }
+    .m3 { animation: m3 8.0s linear infinite; }
+    @keyframes m3 { from { transform: translateX(-157.3px); } to { transform: translateX(0px); } }
+    @media (prefers-color-scheme: dark) {
+      text { fill: #e6edf3; }
+      .card { fill: #161b22; stroke: #30363d; }
+      .hero { fill: #0d1117; }
+      .kick, .count, .dollar, .tick { fill: #5ee0a0; }
+      .sub, .what { fill: #8b949e; }
+      .lang rect, .slot, .chip rect { fill: #0d1117; stroke: #30363d; }
+      .lit { stroke: #5ee0a0; }
+      .flow { fill: #5ee0a0; }
+    }
+  </style>
+
+  <rect class="card" x="10" y="10" width="200" height="380" rx="12"/>
+  <text class="num" x="24" y="32">01</text><text class="kick" x="46" y="32">READS</text>
+  <text class="head" x="24" y="53">your repo</text>
+  <text class="sub" x="24" y="74">written in</text>
+  <g class="lang"><rect x="22" y="84" width="85.5" height="22" rx="11"/><text x="30" y="99">JavaScript</text></g>
+  <rect class="lit bring" style="animation-delay:0.0s" x="22" y="84" width="85.5" height="22" rx="11"/>
+  <g class="lang"><rect x="113.5" y="84" width="57.7" height="22" rx="11"/><text x="121.5" y="99">Python</text></g>
+  <rect class="lit bring" style="animation-delay:0.9s" x="113.5" y="84" width="57.7" height="22" rx="11"/>
+  <g class="lang"><rect x="22" y="112" width="85.5" height="22" rx="11"/><text x="30" y="127">TypeScript</text></g>
+  <rect class="lit bring" style="animation-delay:1.8s" x="22" y="112" width="85.5" height="22" rx="11"/>
+  <text class="sub" x="24" y="160">from what you have</text>
+  <rect class="slot" x="22" y="168" width="176" height="25" rx="6"/>
+  <rect class="lit from" style="animation-delay:0.0s" x="22" y="168" width="176" height="25" rx="6"/>
+  <text class="file" x="32" y="185">docker-compose.yml</text>
+  <text class="tick from" style="animation-delay:0.0s" x="182" y="185">✓</text>
+  <rect class="slot" x="22" y="200" width="176" height="25" rx="6"/>
+  <rect class="lit from" style="animation-delay:2.0s" x="22" y="200" width="176" height="25" rx="6"/>
+  <text class="file" x="32" y="217">Dockerfile</text>
+  <text class="tick from" style="animation-delay:2.0s" x="182" y="217">✓</text>
+  <circle class="flow" cx="215" cy="200" r="2.3"/><circle class="flow f2" cx="215" cy="200" r="2.3"/><circle class="flow f3" cx="215" cy="200" r="2.3"/>
+
+  <rect class="hero" x="228" y="10" width="492" height="380" rx="12"/>
+  <rect x="229" y="11" width="490" height="378" rx="11" fill="url(#glow)"/>
+  <g class="core"><path transform="translate(242 19)" d="M10 0 1 16h7l-4 12 11-17h-7z" fill="url(#bolt)" stroke="#16805a" stroke-width=".8" stroke-linejoin="round"/></g>
+  <text class="kick" x="266" y="32">SHOP<tspan class="sub" dx="10" style="letter-spacing:0;font-weight:400">· 12 building blocks</tspan></text>
+  <text class="head" x="266" y="53">A small online shop with a React frontend and…<tspan class="cursor"> _</tspan></text>
+  <text class="count" x="270" y="126" text-anchor="end">3</text>
+  <text class="what" x="276" y="125">languages</text>
+  <g mask="url(#fade)"><g class="m0">
+    <g class="chip"><rect x="406.0" y="110" width="85.5" height="22" rx="11"/><text x="414.0" y="125">JavaScript</text></g>
+    <g class="chip"><rect x="498.5" y="110" width="57.7" height="22" rx="11"/><text x="506.5" y="125">Python</text></g>
+    <g class="chip"><rect x="563.2" y="110" width="85.5" height="22" rx="11"/><text x="571.2" y="125">TypeScript</text></g>
+    <g class="chip"><rect x="655.7" y="110" width="85.5" height="22" rx="11"/><text x="663.7" y="125">JavaScript</text></g>
+    <g class="chip"><rect x="748.2" y="110" width="57.7" height="22" rx="11"/><text x="756.2" y="125">Python</text></g>
+    <g class="chip"><rect x="812.9" y="110" width="85.5" height="22" rx="11"/><text x="820.9" y="125">TypeScript</text></g>
+    <g class="chip"><rect x="905.4" y="110" width="85.5" height="22" rx="11"/><text x="913.4" y="125">JavaScript</text></g>
+    <g class="chip"><rect x="997.9" y="110" width="57.7" height="22" rx="11"/><text x="1005.9" y="125">Python</text></g>
+    <g class="chip"><rect x="1062.6" y="110" width="85.5" height="22" rx="11"/><text x="1070.6" y="125">TypeScript</text></g>
+  </g></g>
+  <text class="count" x="270" y="164" text-anchor="end">3</text>
+  <text class="what" x="276" y="163">frameworks</text>
+  <g mask="url(#fade)"><g class="m1">
+    <g class="chip"><rect x="406.0" y="148" width="64.7" height="22" rx="11"/><text x="414.0" y="163">FastAPI</text></g>
+    <g class="chip"><rect x="477.7" y="148" width="50.8" height="22" rx="11"/><text x="485.7" y="163">React</text></g>
+    <g class="chip"><rect x="535.5" y="148" width="43.8" height="22" rx="11"/><text x="543.5" y="163">Vite</text></g>
+    <g class="chip"><rect x="586.3" y="148" width="64.7" height="22" rx="11"/><text x="594.3" y="163">FastAPI</text></g>
+    <g class="chip"><rect x="658.0" y="148" width="50.8" height="22" rx="11"/><text x="666.0" y="163">React</text></g>
+    <g class="chip"><rect x="715.8" y="148" width="43.8" height="22" rx="11"/><text x="723.8" y="163">Vite</text></g>
+    <g class="chip"><rect x="766.6" y="148" width="64.7" height="22" rx="11"/><text x="774.6" y="163">FastAPI</text></g>
+    <g class="chip"><rect x="838.3" y="148" width="50.8" height="22" rx="11"/><text x="846.3" y="163">React</text></g>
+    <g class="chip"><rect x="896.1" y="148" width="43.8" height="22" rx="11"/><text x="904.1" y="163">Vite</text></g>
+  </g></g>
+  <text class="count" x="270" y="202" text-anchor="end">4</text>
+  <text class="what" x="276" y="201">services</text>
+  <g mask="url(#fade)"><g class="m2">
+    <g class="chip"><rect x="406.0" y="186" width="57.7" height="22" rx="11"/><text x="414.0" y="201">Docker</text></g>
+    <g class="chip"><rect x="470.7" y="186" width="64.7" height="22" rx="11"/><text x="478.7" y="201">Compose</text></g>
+    <g class="chip"><rect x="542.4" y="186" width="71.6" height="22" rx="11"/><text x="550.4" y="201">Postgres</text></g>
+    <g class="chip"><rect x="621.0" y="186" width="50.8" height="22" rx="11"/><text x="629.0" y="201">Redis</text></g>
+    <g class="chip"><rect x="678.8" y="186" width="57.7" height="22" rx="11"/><text x="686.8" y="201">Docker</text></g>
+    <g class="chip"><rect x="743.5" y="186" width="64.7" height="22" rx="11"/><text x="751.5" y="201">Compose</text></g>
+    <g class="chip"><rect x="815.2" y="186" width="71.6" height="22" rx="11"/><text x="823.2" y="201">Postgres</text></g>
+    <g class="chip"><rect x="893.8" y="186" width="50.8" height="22" rx="11"/><text x="901.8" y="201">Redis</text></g>
+    <g class="chip"><rect x="951.6" y="186" width="57.7" height="22" rx="11"/><text x="959.6" y="201">Docker</text></g>
+    <g class="chip"><rect x="1016.3" y="186" width="64.7" height="22" rx="11"/><text x="1024.3" y="201">Compose</text></g>
+    <g class="chip"><rect x="1088.0" y="186" width="71.6" height="22" rx="11"/><text x="1096.0" y="201">Postgres</text></g>
+    <g class="chip"><rect x="1166.6" y="186" width="50.8" height="22" rx="11"/><text x="1174.6" y="201">Redis</text></g>
+  </g></g>
+  <text class="count" x="270" y="240" text-anchor="end">2</text>
+  <text class="what" x="276" y="239">sections</text>
+  <g mask="url(#fade)"><g class="m3">
+    <g class="chip"><rect x="406.0" y="224" width="92.5" height="22" rx="11"/><text x="414.0" y="239">Quick start</text></g>
+    <g class="chip"><rect x="505.5" y="224" width="50.8" height="22" rx="11"/><text x="513.5" y="239">Stack</text></g>
+    <g class="chip"><rect x="563.3" y="224" width="92.5" height="22" rx="11"/><text x="571.3" y="239">Quick start</text></g>
+    <g class="chip"><rect x="662.8" y="224" width="50.8" height="22" rx="11"/><text x="670.8" y="239">Stack</text></g>
+    <g class="chip"><rect x="720.6" y="224" width="92.5" height="22" rx="11"/><text x="728.6" y="239">Quick start</text></g>
+    <g class="chip"><rect x="820.1" y="224" width="50.8" height="22" rx="11"/><text x="828.1" y="239">Stack</text></g>
+  </g></g>
+  <circle class="flow" cx="735" cy="200" r="2.3"/><circle class="flow f2" cx="735" cy="200" r="2.3"/><circle class="flow f3" cx="735" cy="200" r="2.3"/>
+
+  <rect class="card" x="750" y="10" width="320" height="380" rx="12"/>
+  <text class="num" x="764" y="32">03</text><text class="kick" x="786" y="32">RUN</text>
+  <text class="head" x="764" y="53">commands from the README</text>
+  <rect class="slot" x="764" y="84" width="290" height="30" rx="6"/>
+  <rect class="lit out" style="animation-delay:0.0s" x="764" y="84" width="290" height="30" rx="6"/>
+  <text class="file" x="774" y="104"><tspan class="dollar">$ </tspan>docker compose up</text>
+  <rect class="slot" x="764" y="124" width="290" height="30" rx="6"/>
+  <rect class="lit out" style="animation-delay:2.5s" x="764" y="124" width="290" height="30" rx="6"/>
+  <text class="file" x="774" y="144"><tspan class="dollar">$ </tspan>npm install</text>
+</svg>
