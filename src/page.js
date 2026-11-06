@@ -90,7 +90,8 @@ ${error ? `<p class="error" role="alert">${esc(error)}</p>` : ''}${form(value)}
   });
 }
 
-export function resultPage(origin, repo) {
+export function resultPage(origin, repo, editUrl) {
+  const edit = editUrl || `https://github.com/${repo}/edit/HEAD/README.md`;
   const u = `${origin}/${repo}.svg`;
   const snippet = `<p align="center"><img src="${u}" alt="Diagram of ${repo}" width="100%"></p>`;
   return layout({
@@ -102,7 +103,7 @@ export function resultPage(origin, repo) {
 <p class="lede">Your diagram is ready. Copy the snippet to the top of the README.</p>
 <p id="err" class="error" role="alert" hidden>Could not load a README for ${esc(repo)}. Is the repo public and does it have a README?</p>
 <div class="shot"><img id="img" src="${esc(u)}" alt="Diagram of ${esc(repo)}" width="1080" height="400"></div>
-<div class="row"><button id="copy" type="button">Copy README snippet</button><a class="btn ghost" href="https://github.com/${esc(repo)}/edit/HEAD/README.md" target="_blank" rel="noopener">Open README on GitHub</a></div>
+<div class="row"><button id="copy" type="button">Copy README snippet</button><a class="btn ghost" href="${esc(edit)}" target="_blank" rel="noopener">Open README on GitHub</a></div>
 <p class="steps">On GitHub: paste the snippet at the top, then Propose changes. GitHub forks the repo for you if it is not yours.</p>
 <pre id="snip">${esc(snippet)}</pre>
 <p class="row"><a class="btn ghost" href="/">Another repo</a></p>

@@ -29,3 +29,18 @@ export async function loadRepo(owner, repo, { fetchImpl = fetch, token } = {}) {
   }
   return { readme, files };
 }
+
+// The README's real edit URL (right branch, right file name, e.g. readme.md or docs/README.rst), or null.
+export async function readmeEditUrl(owner, repo, { fetchImpl = fetch, token } = {}) {
+  try {
+    const r = await fetchImpl(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+      headers: { 'user-agent': 'readme-diagram', accept: 'application/vnd.github+json', ...(token ? { authorization: `Bearer ${token}` } : {}) },
+    });
+    if (!r.ok) return null;
+    const html = (await r.json()).html_url;
+    const m = typeof html === 'string' && html.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/(.+)$/);
+    return m ? `https://github.com/${m[1]}/${m[2]}/edit/${m[3]}` : null;
+  } catch {
+    return null;
+  }
+}

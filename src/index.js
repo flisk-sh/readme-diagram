@@ -1,4 +1,4 @@
-import { loadRepo, validRepo } from './github.js';
+import { loadRepo, readmeEditUrl, validRepo } from './github.js';
 import { buildModel, quality } from './model.js';
 import { parseRepoInput } from './repo-input.js';
 import { renderSvg } from './render.js';
@@ -36,7 +36,8 @@ export default {
     const pm = url.pathname.match(/^\/([^/]+)\/([^/.][^/]*)$/);
     if (pm && request.method === 'GET' && !/\.(svg|json)$/.test(pm[2])) {
       if (!validRepo(pm[1], pm[2])) return new Response('bad repo', { status: 400 });
-      return new Response(resultPage(origin, `${pm[1]}/${pm[2]}`), { headers: { 'content-type': 'text/html; charset=utf-8' } });
+      const edit = await readmeEditUrl(pm[1], pm[2], { token: env.GITHUB_TOKEN });
+      return new Response(resultPage(origin, `${pm[1]}/${pm[2]}`, edit), { headers: { 'content-type': 'text/html; charset=utf-8' } });
     }
     const m = url.pathname.match(/^\/([^/]+)\/([^/]+?)\.(svg|json)$/);
     if (m && request.method === 'GET') {

@@ -179,3 +179,14 @@ test('render: radar labels stay inside the radar card', () => {
   const svg = renderSvg(buildModel(fx('fullstack')));
   for (const m of svg.matchAll(/class="tag"[^>]* x="([\d.]+)"/g)) assert.ok(+m[1] >= 940 && +m[1] <= 1046, m[1]);
 });
+
+test('edit link: uses the real branch and README file, falls back to HEAD', async () => {
+  const { readmeEditUrl } = await import('../src/github.js');
+  const { resultPage } = await import('../src/page.js');
+  const ok = async () => Response.json({ html_url: 'https://github.com/o/r/blob/trunk/docs/readme.md' });
+  assert.equal(await readmeEditUrl('o', 'r', { fetchImpl: ok }), 'https://github.com/o/r/edit/trunk/docs/readme.md');
+  assert.equal(await readmeEditUrl('o', 'r', { fetchImpl: async () => new Response('', { status: 403 }) }), null);
+  assert.equal(await readmeEditUrl('o', 'r', { fetchImpl: async () => { throw new Error('x'); } }), null);
+  assert.match(resultPage('https://d', 'o/r', 'https://github.com/o/r/edit/trunk/docs/readme.md'), /href="https:\/\/github\.com\/o\/r\/edit\/trunk\/docs\/readme\.md"/);
+  assert.match(resultPage('https://d', 'o/r', null), /edit\/HEAD\/README\.md/);
+});
