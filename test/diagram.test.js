@@ -50,6 +50,8 @@ test('render: valid-looking, animated, bounded size', () => {
   assert.match(svg, /^<svg [^>]*viewBox="0 0 1080 400"/);
   assert.match(svg, /<\/svg>\s*$/);
   assert.match(svg, /@keyframes m0/);
+  assert.equal((svg.match(/<rect class="card"/g) ?? []).length, 3, 'three plain cards plus the hero');
+  assert.match(svg, /class="arm"/);
   assert.match(svg, /prefers-color-scheme: dark/);
   assert.ok(svg.length < 60_000, `svg is ${svg.length} bytes`);
   assert.equal((svg.match(/<svg /g) ?? []).length, 1);
@@ -58,7 +60,7 @@ test('render: valid-looking, animated, bounded size', () => {
 test('render: minimal README still produces a complete diagram', () => {
   const svg = renderSvg(buildModel(fx('minimal')));
   assert.match(svg, /<\/svg>\s*$/);
-  assert.match(svg, /nothing to list yet/);
+  assert.match(svg, /RADAR/);
 });
 
 test('render: hostile README text is escaped', () => {
@@ -97,7 +99,7 @@ test('worker: landing page and /ready', async () => {
 test('render: long tagline is clipped to fit the hero card', () => {
   const svg = renderSvg(buildModel(`# T\n\n${'word '.repeat(40)}\n`));
   const head = svg.match(/class="head" x="266" y="53">([^<]*)</)[1];
-  assert.ok(head.length <= 46, head);
+  assert.ok(head.length <= 40, head);
 });
 
 test('github: falls back to raw.githubusercontent when the API is rate-limited', async () => {
@@ -162,5 +164,18 @@ test('quality: thin repos are flagged, rich ones pass', async () => {
 test('render: few rows are centred, stat strip and INSIDE card appear', () => {
   const svg = renderSvg(buildModel(fx('minimal')));
   assert.match(svg, /building blocks/);
-  assert.match(svg, /INSIDE|RUN/);
+  assert.match(svg, /RUN/);
+});
+
+test('model: long README titles are cut at the colon', async () => {
+  const { shortTitle } = await import('../src/model.js');
+  assert.equal(shortTitle('README Score: your README, scored out of 100'), 'README Score');
+  assert.equal(shortTitle('Tool - does things'), 'Tool');
+  assert.equal(shortTitle('flisk-sh'), 'flisk-sh');
+  assert.equal(shortTitle(''), '');
+});
+
+test('render: radar labels stay inside the radar card', () => {
+  const svg = renderSvg(buildModel(fx('fullstack')));
+  for (const m of svg.matchAll(/class="tag"[^>]* x="([\d.]+)"/g)) assert.ok(+m[1] >= 940 && +m[1] <= 1046, m[1]);
 });

@@ -4,6 +4,12 @@ import { parseReadme } from './parse.js';
 // Facts -> the fixed three-card model the renderer draws. Same README in, same model out.
 const GENERIC = /^(table of contents|contents|license|licence|contributing|contributors|credits|acknowledg\w*|changelog|what it does|things to know|about|overview|introduction|readme|support|faq|security|code of conduct|badges?)$/i;
 
+// "README Score: your README, scored" -> "README Score"
+export function shortTitle(t) {
+  const head = String(t || '').split(/\s[:\u2013\u2014|-]\s|:\s/)[0].trim();
+  return head || String(t || '').trim();
+}
+
 export function buildModel(md, repoFiles = [], name = '') {
   const parsed = parseReadme(md);
   const found = detect(parsed, repoFiles);
@@ -17,13 +23,14 @@ export function buildModel(md, repoFiles = [], name = '') {
   const commands = parsed.commands.filter((c) => c.length <= 30).slice(0, 4);
   const blocks = rows.reduce((n, r) => n + r.chips.length, 0);
   return {
-    title: parsed.title || name || 'Project',
+    title: shortTitle(parsed.title) || name || 'Project',
     tagline: parsed.tagline,
     left: { langs: found.languages.slice(0, 6), files: found.files },
     rows,
     blocks,
     commands,
-    inside: parsed.sections.map((s) => s.title).filter((t) => !GENERIC.test(t)).slice(0, 6),
+    inside: [...new Set(parsed.sections.map((s) => s.title).filter((t) => !GENERIC.test(t)))].slice(0, 8),
+    radar: [...new Set([...found.services, ...found.frameworks, ...found.languages])].slice(0, 8),
     sections: parsed.sections.length,
   };
 }
