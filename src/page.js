@@ -90,7 +90,7 @@ ${error ? `<p class="error" role="alert">${esc(error)}</p>` : ''}${form(value)}
   });
 }
 
-export function resultPage(origin, repo, editUrl) {
+export function resultPage(origin, repo, editUrl, { oauth = false } = {}) {
   const edit = editUrl || `https://github.com/${repo}/edit/HEAD/README.md`;
   const u = `${origin}/${repo}.svg`;
   const snippet = `<p align="center"><img src="${u}" alt="Diagram of ${repo}" width="100%"></p>`;
@@ -103,7 +103,8 @@ export function resultPage(origin, repo, editUrl) {
 <p class="lede">Your diagram is ready. Copy the snippet to the top of the README.</p>
 <p id="err" class="error" role="alert" hidden>Could not load a README for ${esc(repo)}. Is the repo public and does it have a README?</p>
 <div class="shot"><img id="img" src="${esc(u)}" alt="Diagram of ${esc(repo)}" width="1080" height="400"></div>
-<div class="row"><button id="copy" type="button" class="ghostbtn">Copy README snippet</button><a id="edit" class="btn" href="${esc(edit)}" target="_blank" rel="noopener">Copy snippet and open README on GitHub</a></div>
+<div class="row">${oauth ? `<a class="btn" href="/auth/start?repo=${esc(repo)}">Open a pull request for me</a>` : ''}<button id="copy" type="button" class="ghostbtn">Copy README snippet</button><a id="edit" class="btn${oauth ? ' ghost' : ''}" href="${esc(edit)}" target="_blank" rel="noopener">Copy snippet and open README on GitHub</a></div>
+${oauth ? '<p class="steps">The green button signs you in with GitHub, forks the repo if it is not yours, and opens the pull request. It asks only for access to public repos and stores nothing.</p>' : ''}
 <p class="steps" id="steps"><b>1.</b> Click the green button: it copies the snippet and opens the README editor. <b>2.</b> Click in the editor, press Ctrl+V (⌘V on Mac) at the very top. <b>3.</b> Click <b>Commit changes</b>, then <b>Propose changes</b>. GitHub forks the repo for you if it is not yours.</p>
 <pre id="snip">${esc(snippet)}</pre>
 <p class="row"><a class="btn ghost" href="/">Another repo</a></p>
@@ -115,6 +116,13 @@ document.getElementById('edit').addEventListener('click',()=>{navigator.clipboar
 document.getElementById('img').onerror=()=>{document.getElementById('err').hidden=false;document.getElementById('img').parentNode.hidden=true};
 </script>`,
   });
+}
+
+export function donePage(origin, { repo, url, forked, error }) {
+  const body = error
+    ? `<h1 class="grad">Not this time</h1><p class="lede">${esc(error)}</p><div class="row"><a class="btn" href="/${esc(repo || '')}">Back to the diagram</a></div>`
+    : `<h1 class="grad">Pull request opened</h1><p class="lede">${forked ? 'We forked the repo to your account and ' : ''}opened a pull request that adds the diagram to the README of ${esc(repo)}.</p><div class="row"><a class="btn" href="${esc(url)}">View the pull request</a><a class="btn ghost" href="/">Another repo</a></div>`;
+  return layout({ title: error ? 'README Diagram: not this time' : 'README Diagram: pull request opened', origin, path: '/auth/callback', body: `<main><section class="hero stage"><div class="wrap">${body}</div></section></main>` });
 }
 
 export { parseRepoInput };
