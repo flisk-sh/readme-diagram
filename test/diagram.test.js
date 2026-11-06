@@ -270,3 +270,17 @@ test('github: follows a symlinked README that raw returns as a bare path', async
   };
   assert.match((await loadRepo('a', 'b', { fetchImpl })).readme, /# Real/);
 });
+
+test('github: without the API, manifest files are probed on raw', async () => {
+  const { loadRepo } = await import('../src/github.js');
+  const fetchImpl = async (u, o = {}) => {
+    if (u.startsWith('https://api.github.com')) return new Response('', { status: 403 });
+    if (u.endsWith('/HEAD/README.md')) return new Response('# x\n');
+    if (u.endsWith('/HEAD/package.json')) return new Response(o.method === 'HEAD' ? '' : '{"scripts":{"dev":"x"}}');
+    if (u.endsWith('/HEAD/pnpm-lock.yaml')) return new Response('');
+    return new Response('', { status: 404 });
+  };
+  const r = await loadRepo('a', 'b', { fetchImpl });
+  assert.deepEqual(r.files.sort(), ['package.json', 'pnpm-lock.yaml']);
+  assert.deepEqual(r.pkg, { scripts: { dev: 'x' } });
+});

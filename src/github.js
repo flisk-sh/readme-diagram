@@ -42,6 +42,19 @@ export async function loadRepo(owner, repo, { fetchImpl = fetch, token } = {}) {
   } catch {
     // the file list only enriches the diagram
   }
+  if (files.length === 0) {
+    // API unavailable: probe the few manifest files that decide the commands, straight from raw.
+    const probes = ['package.json', 'pnpm-lock.yaml', 'yarn.lock', 'bun.lock', 'Cargo.toml', 'go.mod'];
+    const found = await Promise.all(probes.map(async (n) => {
+      try {
+        const res = await fetchImpl(`https://raw.githubusercontent.com/${owner}/${repo}/HEAD/${n}`, { method: 'HEAD', headers: { 'user-agent': 'readme-diagram' } });
+        return res.ok ? n : null;
+      } catch {
+        return null;
+      }
+    }));
+    files = found.filter(Boolean);
+  }
   let pkg = null;
   if (files.includes('package.json')) {
     try {
