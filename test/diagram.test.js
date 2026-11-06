@@ -229,3 +229,32 @@ test('commands: shown whole or not at all, and never twice', () => {
   const shown = [...svg.matchAll(/<tspan>\$<\/tspan> ([^<]+)/g)].map((m) => m[1]);
   assert.equal(new Set(shown).size, shown.length, `repeated: ${shown}`);
 });
+
+test('manifest commands: package.json scripts and the right package manager', async () => {
+  const { manifestCommands } = await import('../src/model.js');
+  assert.deepEqual(manifestCommands(['package.json', 'pnpm-lock.yaml'], { scripts: { dev: 'x', build: 'y', test: 'z', other: 'q' } }), ['pnpm dev', 'pnpm build', 'pnpm test']);
+  assert.deepEqual(manifestCommands(['package.json'], { scripts: { dev: 'x', test: 'z' } }), ['npm run dev', 'npm test']);
+  assert.deepEqual(manifestCommands(['package.json', 'bun.lock'], { scripts: { start: 'x' } }), ['bun start']);
+  assert.deepEqual(manifestCommands(['package.json'], { scripts: 'oops' }), []);
+  assert.deepEqual(manifestCommands(['Cargo.toml', 'go.mod']), ['cargo build', 'cargo test', 'go build ./...', 'go test ./...']);
+  assert.deepEqual(manifestCommands([], null), []);
+});
+
+test('manifest commands: a README with no commands still gets the repo\'s own, labelled as such', () => {
+  const m = buildModel('# T\n\nA project long enough to have a tagline here.\n', ['package.json', 'pnpm-lock.yaml'], 'o/t', { scripts: { dev: 'x', build: 'y', test: 'z', lint: 'w' } });
+  assert.deepEqual(m.commands, ['pnpm dev', 'pnpm build', 'pnpm test', 'pnpm lint']);
+  const svg = renderSvg(m);
+  assert.match(svg, /→ from the repo/);
+  assert.match(svg, /pnpm dev/);
+});
+
+test('github: reads package.json when the repo has one, ignores a broken one', async () => {
+  const { loadRepo } = await import('../src/github.js');
+  const mk = (pkgBody) => async (u) => {
+    if (u.endsWith('/readme')) return new Response('# x\n');
+    if (u.endsWith('/contents')) return Response.json([{ name: 'package.json' }]);
+    return new Response(pkgBody);
+  };
+  assert.deepEqual((await loadRepo('a', 'b', { fetchImpl: mk('{"scripts":{"dev":"x"}}') })).pkg, { scripts: { dev: 'x' } });
+  assert.equal((await loadRepo('a', 'b', { fetchImpl: mk('{not json') })).pkg, null);
+});

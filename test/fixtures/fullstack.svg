@@ -182,7 +182,7 @@
   <rect class="slot" x="750" y="109" width="136" height="22" rx="6"/>
   <rect class="lit out" style="animation-delay:1.5s" x="750" y="109" width="136" height="22" rx="6"/>
   <text class="file" style="font-size:11.5px" x="758" y="124">Stack</text>
-  <text class="note" x="752" y="356">straight from the README</text>
+  <text class="note" x="752" y="356">README, plus repo scripts</text>
 
   <circle class="flow" cx="903" cy="200" r="2.3"/><circle class="flow f2" cx="903" cy="200" r="2.3"/><circle class="flow f3" cx="903" cy="200" r="2.3"/>
 

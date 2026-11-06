@@ -150,7 +150,7 @@ export function renderSvg(model) {
     return `<rect class="slot" x="750" y="${y}" width="136" height="36" rx="6"/>
   <rect class="lit out" style="${dl}" x="750" y="${y}" width="136" height="36" rx="6"/>
   <text class="file" x="758" y="${y + 16}">${esc(c)}</text>
-  <text class="host" x="758" y="${y + 29}">→ step ${i + 1}</text>`;
+  <text class="host" x="758" y="${y + 29}">→ ${model.sources?.[c] === 'repo' ? 'from the repo' : 'from README'}</text>`;
   });
   const secs = model.inside.slice(0, 5);
   const secTop = cmds.length ? 190 : 82;
@@ -258,7 +258,7 @@ export function renderSvg(model) {
   ${cmdEls.join('\n  ')}
   ${cmds.length && secs.length ? `<text class="sub" x="752" y="182">${model.inside.length} sections</text>` : ''}
   ${secEls.join('\n  ')}
-  <text class="note" x="752" y="356">straight from the README</text>
+  <text class="note" x="752" y="356">README, plus repo scripts</text>
 
   <circle class="flow" cx="903" cy="200" r="2.3"/><circle class="flow f2" cx="903" cy="200" r="2.3"/><circle class="flow f3" cx="903" cy="200" r="2.3"/>
 

@@ -2,7 +2,7 @@ import { detect } from './detect.js';
 import { parseReadme } from './parse.js';
 
 // Facts -> the fixed three-card model the renderer draws. Same README in, same model out.
-const GENERIC = /^(table of contents|contents|toc|license|licen[cs]e.*|contributing.*|contributors?|credits|acknowledg\w*|changelog|what it does|things to know|about|overview|introduction|readme|support|faq|security|code of conduct|badges?|community|communication|documentation.*|resources|additional resources|links|screenshots?.*|good first issues?:?|.*sponsors?|.*backers|keystone.*|opinions)$/i;
+const GENERIC = /^(table of contents|contents|toc|license|licen[cs]e.*|contributing.*|contributors?|credits|acknowledg\w*|changelog|what it does|things to know|about|overview|introduction|readme|support|faq|security|code of conduct|badges?|community|communication|documentation.*|resources|additional resources|links|screenshots?.*|good first issues?:?|.*sponsors?|.*backers|keystone.*|opinions|authors?|maintainers?|team)$/i;
 
 // "README Score: your README, scored" -> "README Score"
 export function shortTitle(t) {
@@ -10,7 +10,21 @@ export function shortTitle(t) {
   return head || String(t || '').trim();
 }
 
-export function buildModel(md, repoFiles = [], name = '') {
+// Commands the repo itself defines: package.json scripts, or the standard build for Cargo and Go.
+export function manifestCommands(files = [], pkg = null) {
+  const out = [];
+  if (pkg && typeof pkg.scripts === 'object' && pkg.scripts) {
+    const pm = files.includes('pnpm-lock.yaml') ? 'pnpm' : files.includes('yarn.lock') ? 'yarn' : files.includes('bun.lock') || files.includes('bun.lockb') ? 'bun' : 'npm';
+    for (const k of ['dev', 'start', 'build', 'test', 'lint']) {
+      if (typeof pkg.scripts[k] === 'string') out.push(pm === 'npm' && k !== 'start' && k !== 'test' ? `npm run ${k}` : `${pm} ${k}`);
+    }
+  }
+  if (files.includes('Cargo.toml')) out.push('cargo build', 'cargo test');
+  if (files.includes('go.mod')) out.push('go build ./...', 'go test ./...');
+  return out;
+}
+
+export function buildModel(md, repoFiles = [], name = '', pkg = null) {
   const parsed = parseReadme(md);
   const found = detect(parsed, repoFiles);
   const rows = [
@@ -20,7 +34,10 @@ export function buildModel(md, repoFiles = [], name = '') {
     { label: 'sections', chips: [...new Set(parsed.sections.map((s) => s.title).filter((t) => t.length <= 24 && !GENERIC.test(t)))] },
   ].filter((r) => r.chips.length > 0).map((r) => ({ ...r, chips: r.chips.slice(0, 14) }));
 
-  const commands = parsed.commands.filter((c) => c.length <= 30).slice(0, 4);
+  const fromReadme = parsed.commands.filter((c) => c.length <= 30);
+  const fromRepo = manifestCommands(repoFiles, pkg).filter((c) => !fromReadme.includes(c));
+  const commands = [...fromReadme, ...fromRepo].slice(0, 6);
+  const sources = Object.fromEntries([...fromReadme.map((c) => [c, 'README']), ...fromRepo.map((c) => [c, 'repo'])]);
   const blocks = rows.reduce((n, r) => n + r.chips.length, 0);
   return {
     slug: name,
@@ -30,6 +47,7 @@ export function buildModel(md, repoFiles = [], name = '') {
     rows,
     blocks,
     commands,
+    sources,
     inside: [...new Set(parsed.sections.map((s) => s.title).filter((t) => !GENERIC.test(t)))].slice(0, 8),
     radar: [...new Set([...found.services, ...found.frameworks, ...found.languages])].slice(0, 8),
     sections: parsed.sections.length,

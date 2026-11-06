@@ -36,7 +36,16 @@ export async function loadRepo(owner, repo, { fetchImpl = fetch, token } = {}) {
   } catch {
     // the file list only enriches the diagram
   }
-  return { readme, files };
+  let pkg = null;
+  if (files.includes('package.json')) {
+    try {
+      const pr = await fetchImpl(`https://raw.githubusercontent.com/${owner}/${repo}/HEAD/package.json`, { headers: { 'user-agent': 'readme-diagram' } });
+      if (pr.ok) pkg = JSON.parse((await pr.text()).slice(0, 200_000));
+    } catch {
+      // package.json only adds commands
+    }
+  }
+  return { readme, files, pkg };
 }
 
 // The README's real edit URL (right branch, right file name, e.g. readme.md or docs/README.rst), or null.
