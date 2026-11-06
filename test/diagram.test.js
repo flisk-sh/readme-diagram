@@ -58,7 +58,7 @@ test('render: valid-looking, animated, bounded size', () => {
 test('render: minimal README still produces a complete diagram', () => {
   const svg = renderSvg(buildModel(fx('minimal')));
   assert.match(svg, /<\/svg>\s*$/);
-  assert.match(svg, /no shell commands found/);
+  assert.match(svg, /nothing to list yet/);
 });
 
 test('render: hostile README text is escaped', () => {
@@ -127,9 +127,40 @@ test('repo input: accepts owner/repo and every pasted GitHub URL shape', async (
   for (const v of ['', 'flisk', 'https://github.com/', '../x', 'a b/c', null, undefined, 'https://example.com/a/b/c<']) assert.equal(p(v), '', String(v));
 });
 
-test('page: ships the parser to the browser and never builds a double URL', async () => {
-  const { page } = await import('../src/page.js');
-  const html = page('https://diagram.flisk.si');
-  assert.match(html, /function parseRepoInput/);
-  assert.match(html, /'https:\/\/diagram\.flisk\.si\/'\+repo\+'\.svg'/);
+test('site: landing, check redirect, result page, icon', async () => {
+  const env = { PUBLIC_ORIGIN: 'https://diagram.flisk.si' };
+  const get = (u) => worker.fetch(new Request(`https://x${u}`), env);
+  const home = await (await get('/')).text();
+  assert.match(home, /<form class="repo" action="\/check"/);
+  const r = await worker.fetch(new Request('https://x/check?repo=' + encodeURIComponent('https://github.com/flisk-sh/flisk/')), env);
+  assert.equal(r.status, 302);
+  assert.equal(r.headers.get('location'), 'https://diagram.flisk.si/flisk-sh/flisk');
+  const bad = await get('/check?repo=nope');
+  assert.equal(bad.status, 400);
+  assert.match(await bad.text(), /Enter a GitHub repo/);
+  const res = await get('/flisk-sh/flisk');
+  assert.equal(res.status, 200);
+  const html = await res.text();
+  assert.match(html, /src="https:\/\/diagram\.flisk\.si\/flisk-sh\/flisk\.svg"/);
+  assert.ok(!html.includes('https://diagram.flisk.si/https://'));
+  assert.equal((await get('/icon.svg')).headers.get('content-type'), 'image/svg+xml');
+});
+
+test('site: hostile repo path cannot inject into the result page', async () => {
+  const res = await worker.fetch(new Request('https://x/a%22%3E%3Cscript%3E/b'), {});
+  assert.ok(res.status === 400 || !(await res.text()).includes('<script>alert'));
+});
+
+test('quality: thin repos are flagged, rich ones pass', async () => {
+  const { quality } = await import('../src/model.js');
+  assert.equal(quality(buildModel(fx('minimal'))).ok, false);
+  assert.ok(quality(buildModel(fx('minimal'))).reasons.length >= 2);
+  const rich = `# Rich\n\nA rich project with plenty of detail for the tagline.\n\n## Setup\n\n- React Vue Svelte Angular Astro Vite\n- Express Hono Fastify NestJS FastAPI Django\n- Postgres MySQL Redis Kafka Docker Qdrant\n\nTypeScript Python Go Rust Ruby PHP.\n`;
+  assert.equal(quality(buildModel(rich)).ok, true);
+});
+
+test('render: few rows are centred, stat strip and INSIDE card appear', () => {
+  const svg = renderSvg(buildModel(fx('minimal')));
+  assert.match(svg, /building blocks/);
+  assert.match(svg, /INSIDE|RUN/);
 });

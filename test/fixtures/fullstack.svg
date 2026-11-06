@@ -26,6 +26,7 @@
     .from, .out { animation: bring 10s linear infinite; }
     .tick { opacity: 0; font-size: 12px; }
     @keyframes bring { 0% { opacity: 0; } 4% { opacity: 1; } 16% { opacity: 1; } 22%, 100% { opacity: 0; } }
+    .axis { stroke: #1f9d6b; stroke-opacity: .25; }
     .flow { fill: #1f9d6b; opacity: 0; animation: flow 1.2s linear infinite; }
     .f2 { animation-delay: .4s; } .f3 { animation-delay: .8s; }
     @keyframes flow { 0% { opacity: 0; transform: translateX(0); } 25%, 75% { opacity: 1; } 100% { opacity: 0; transform: translateX(14px); } }
@@ -79,58 +80,62 @@
   <g class="core"><path transform="translate(242 19)" d="M10 0 1 16h7l-4 12 11-17h-7z" fill="url(#bolt)" stroke="#16805a" stroke-width=".8" stroke-linejoin="round"/></g>
   <text class="kick" x="266" y="32">SHOP<tspan class="sub" dx="10" style="letter-spacing:0;font-weight:400">· 12 building blocks</tspan></text>
   <text class="head" x="266" y="53">A small online shop with a React frontend and…<tspan class="cursor"> _</tspan></text>
-  <text class="count" x="270" y="126" text-anchor="end">3</text>
-  <text class="what" x="276" y="125">languages</text>
+  <text class="count" x="270" y="114" text-anchor="end">3</text>
+  <text class="what" x="276" y="113">languages</text>
   <g mask="url(#fade)"><g class="m0">
-    <g class="chip"><rect x="406.0" y="110" width="85.5" height="22" rx="11"/><text x="414.0" y="125">JavaScript</text></g>
-    <g class="chip"><rect x="498.5" y="110" width="57.7" height="22" rx="11"/><text x="506.5" y="125">Python</text></g>
-    <g class="chip"><rect x="563.2" y="110" width="85.5" height="22" rx="11"/><text x="571.2" y="125">TypeScript</text></g>
-    <g class="chip"><rect x="655.7" y="110" width="85.5" height="22" rx="11"/><text x="663.7" y="125">JavaScript</text></g>
-    <g class="chip"><rect x="748.2" y="110" width="57.7" height="22" rx="11"/><text x="756.2" y="125">Python</text></g>
-    <g class="chip"><rect x="812.9" y="110" width="85.5" height="22" rx="11"/><text x="820.9" y="125">TypeScript</text></g>
-    <g class="chip"><rect x="905.4" y="110" width="85.5" height="22" rx="11"/><text x="913.4" y="125">JavaScript</text></g>
-    <g class="chip"><rect x="997.9" y="110" width="57.7" height="22" rx="11"/><text x="1005.9" y="125">Python</text></g>
-    <g class="chip"><rect x="1062.6" y="110" width="85.5" height="22" rx="11"/><text x="1070.6" y="125">TypeScript</text></g>
+    <g class="chip"><rect x="406.0" y="98" width="85.5" height="22" rx="11"/><text x="414.0" y="113">JavaScript</text></g>
+    <g class="chip"><rect x="498.5" y="98" width="57.7" height="22" rx="11"/><text x="506.5" y="113">Python</text></g>
+    <g class="chip"><rect x="563.2" y="98" width="85.5" height="22" rx="11"/><text x="571.2" y="113">TypeScript</text></g>
+    <g class="chip"><rect x="655.7" y="98" width="85.5" height="22" rx="11"/><text x="663.7" y="113">JavaScript</text></g>
+    <g class="chip"><rect x="748.2" y="98" width="57.7" height="22" rx="11"/><text x="756.2" y="113">Python</text></g>
+    <g class="chip"><rect x="812.9" y="98" width="85.5" height="22" rx="11"/><text x="820.9" y="113">TypeScript</text></g>
+    <g class="chip"><rect x="905.4" y="98" width="85.5" height="22" rx="11"/><text x="913.4" y="113">JavaScript</text></g>
+    <g class="chip"><rect x="997.9" y="98" width="57.7" height="22" rx="11"/><text x="1005.9" y="113">Python</text></g>
+    <g class="chip"><rect x="1062.6" y="98" width="85.5" height="22" rx="11"/><text x="1070.6" y="113">TypeScript</text></g>
   </g></g>
-  <text class="count" x="270" y="164" text-anchor="end">3</text>
-  <text class="what" x="276" y="163">frameworks</text>
+  <text class="count" x="270" y="168" text-anchor="end">3</text>
+  <text class="what" x="276" y="167">frameworks</text>
   <g mask="url(#fade)"><g class="m1">
-    <g class="chip"><rect x="406.0" y="148" width="64.7" height="22" rx="11"/><text x="414.0" y="163">FastAPI</text></g>
-    <g class="chip"><rect x="477.7" y="148" width="50.8" height="22" rx="11"/><text x="485.7" y="163">React</text></g>
-    <g class="chip"><rect x="535.5" y="148" width="43.8" height="22" rx="11"/><text x="543.5" y="163">Vite</text></g>
-    <g class="chip"><rect x="586.3" y="148" width="64.7" height="22" rx="11"/><text x="594.3" y="163">FastAPI</text></g>
-    <g class="chip"><rect x="658.0" y="148" width="50.8" height="22" rx="11"/><text x="666.0" y="163">React</text></g>
-    <g class="chip"><rect x="715.8" y="148" width="43.8" height="22" rx="11"/><text x="723.8" y="163">Vite</text></g>
-    <g class="chip"><rect x="766.6" y="148" width="64.7" height="22" rx="11"/><text x="774.6" y="163">FastAPI</text></g>
-    <g class="chip"><rect x="838.3" y="148" width="50.8" height="22" rx="11"/><text x="846.3" y="163">React</text></g>
-    <g class="chip"><rect x="896.1" y="148" width="43.8" height="22" rx="11"/><text x="904.1" y="163">Vite</text></g>
+    <g class="chip"><rect x="406.0" y="152" width="64.7" height="22" rx="11"/><text x="414.0" y="167">FastAPI</text></g>
+    <g class="chip"><rect x="477.7" y="152" width="50.8" height="22" rx="11"/><text x="485.7" y="167">React</text></g>
+    <g class="chip"><rect x="535.5" y="152" width="43.8" height="22" rx="11"/><text x="543.5" y="167">Vite</text></g>
+    <g class="chip"><rect x="586.3" y="152" width="64.7" height="22" rx="11"/><text x="594.3" y="167">FastAPI</text></g>
+    <g class="chip"><rect x="658.0" y="152" width="50.8" height="22" rx="11"/><text x="666.0" y="167">React</text></g>
+    <g class="chip"><rect x="715.8" y="152" width="43.8" height="22" rx="11"/><text x="723.8" y="167">Vite</text></g>
+    <g class="chip"><rect x="766.6" y="152" width="64.7" height="22" rx="11"/><text x="774.6" y="167">FastAPI</text></g>
+    <g class="chip"><rect x="838.3" y="152" width="50.8" height="22" rx="11"/><text x="846.3" y="167">React</text></g>
+    <g class="chip"><rect x="896.1" y="152" width="43.8" height="22" rx="11"/><text x="904.1" y="167">Vite</text></g>
   </g></g>
-  <text class="count" x="270" y="202" text-anchor="end">4</text>
-  <text class="what" x="276" y="201">services</text>
+  <text class="count" x="270" y="222" text-anchor="end">4</text>
+  <text class="what" x="276" y="221">services</text>
   <g mask="url(#fade)"><g class="m2">
-    <g class="chip"><rect x="406.0" y="186" width="57.7" height="22" rx="11"/><text x="414.0" y="201">Docker</text></g>
-    <g class="chip"><rect x="470.7" y="186" width="64.7" height="22" rx="11"/><text x="478.7" y="201">Compose</text></g>
-    <g class="chip"><rect x="542.4" y="186" width="71.6" height="22" rx="11"/><text x="550.4" y="201">Postgres</text></g>
-    <g class="chip"><rect x="621.0" y="186" width="50.8" height="22" rx="11"/><text x="629.0" y="201">Redis</text></g>
-    <g class="chip"><rect x="678.8" y="186" width="57.7" height="22" rx="11"/><text x="686.8" y="201">Docker</text></g>
-    <g class="chip"><rect x="743.5" y="186" width="64.7" height="22" rx="11"/><text x="751.5" y="201">Compose</text></g>
-    <g class="chip"><rect x="815.2" y="186" width="71.6" height="22" rx="11"/><text x="823.2" y="201">Postgres</text></g>
-    <g class="chip"><rect x="893.8" y="186" width="50.8" height="22" rx="11"/><text x="901.8" y="201">Redis</text></g>
-    <g class="chip"><rect x="951.6" y="186" width="57.7" height="22" rx="11"/><text x="959.6" y="201">Docker</text></g>
-    <g class="chip"><rect x="1016.3" y="186" width="64.7" height="22" rx="11"/><text x="1024.3" y="201">Compose</text></g>
-    <g class="chip"><rect x="1088.0" y="186" width="71.6" height="22" rx="11"/><text x="1096.0" y="201">Postgres</text></g>
-    <g class="chip"><rect x="1166.6" y="186" width="50.8" height="22" rx="11"/><text x="1174.6" y="201">Redis</text></g>
+    <g class="chip"><rect x="406.0" y="206" width="57.7" height="22" rx="11"/><text x="414.0" y="221">Docker</text></g>
+    <g class="chip"><rect x="470.7" y="206" width="64.7" height="22" rx="11"/><text x="478.7" y="221">Compose</text></g>
+    <g class="chip"><rect x="542.4" y="206" width="71.6" height="22" rx="11"/><text x="550.4" y="221">Postgres</text></g>
+    <g class="chip"><rect x="621.0" y="206" width="50.8" height="22" rx="11"/><text x="629.0" y="221">Redis</text></g>
+    <g class="chip"><rect x="678.8" y="206" width="57.7" height="22" rx="11"/><text x="686.8" y="221">Docker</text></g>
+    <g class="chip"><rect x="743.5" y="206" width="64.7" height="22" rx="11"/><text x="751.5" y="221">Compose</text></g>
+    <g class="chip"><rect x="815.2" y="206" width="71.6" height="22" rx="11"/><text x="823.2" y="221">Postgres</text></g>
+    <g class="chip"><rect x="893.8" y="206" width="50.8" height="22" rx="11"/><text x="901.8" y="221">Redis</text></g>
+    <g class="chip"><rect x="951.6" y="206" width="57.7" height="22" rx="11"/><text x="959.6" y="221">Docker</text></g>
+    <g class="chip"><rect x="1016.3" y="206" width="64.7" height="22" rx="11"/><text x="1024.3" y="221">Compose</text></g>
+    <g class="chip"><rect x="1088.0" y="206" width="71.6" height="22" rx="11"/><text x="1096.0" y="221">Postgres</text></g>
+    <g class="chip"><rect x="1166.6" y="206" width="50.8" height="22" rx="11"/><text x="1174.6" y="221">Redis</text></g>
   </g></g>
-  <text class="count" x="270" y="240" text-anchor="end">2</text>
-  <text class="what" x="276" y="239">sections</text>
+  <text class="count" x="270" y="276" text-anchor="end">2</text>
+  <text class="what" x="276" y="275">sections</text>
   <g mask="url(#fade)"><g class="m3">
-    <g class="chip"><rect x="406.0" y="224" width="92.5" height="22" rx="11"/><text x="414.0" y="239">Quick start</text></g>
-    <g class="chip"><rect x="505.5" y="224" width="50.8" height="22" rx="11"/><text x="513.5" y="239">Stack</text></g>
-    <g class="chip"><rect x="563.3" y="224" width="92.5" height="22" rx="11"/><text x="571.3" y="239">Quick start</text></g>
-    <g class="chip"><rect x="662.8" y="224" width="50.8" height="22" rx="11"/><text x="670.8" y="239">Stack</text></g>
-    <g class="chip"><rect x="720.6" y="224" width="92.5" height="22" rx="11"/><text x="728.6" y="239">Quick start</text></g>
-    <g class="chip"><rect x="820.1" y="224" width="50.8" height="22" rx="11"/><text x="828.1" y="239">Stack</text></g>
+    <g class="chip"><rect x="406.0" y="260" width="92.5" height="22" rx="11"/><text x="414.0" y="275">Quick start</text></g>
+    <g class="chip"><rect x="505.5" y="260" width="50.8" height="22" rx="11"/><text x="513.5" y="275">Stack</text></g>
+    <g class="chip"><rect x="563.3" y="260" width="92.5" height="22" rx="11"/><text x="571.3" y="275">Quick start</text></g>
+    <g class="chip"><rect x="662.8" y="260" width="50.8" height="22" rx="11"/><text x="670.8" y="275">Stack</text></g>
+    <g class="chip"><rect x="720.6" y="260" width="92.5" height="22" rx="11"/><text x="728.6" y="275">Quick start</text></g>
+    <g class="chip"><rect x="820.1" y="260" width="50.8" height="22" rx="11"/><text x="828.1" y="275">Stack</text></g>
   </g></g>
+  <line class="axis" x1="242" y1="312" x2="706" y2="312"/>
+  <text class="count" x="242" y="346">12</text><text class="what" x="242" y="364">building blocks</text>
+  <text class="count" x="398" y="346">2</text><text class="what" x="398" y="364">sections</text>
+  <text class="count" x="554" y="346">2</text><text class="what" x="554" y="364">commands</text>
   <circle class="flow" cx="735" cy="200" r="2.3"/><circle class="flow f2" cx="735" cy="200" r="2.3"/><circle class="flow f3" cx="735" cy="200" r="2.3"/>
 
   <rect class="card" x="750" y="10" width="320" height="380" rx="12"/>

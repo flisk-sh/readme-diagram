@@ -62,12 +62,17 @@ export function renderSvg(model) {
   <text class="file" x="32" y="${y + 17}">${esc(clip(f, 18))}</text>
   <text class="tick from" style="animation-delay:${(i * 2).toFixed(1)}s" x="182" y="${y + 17}">✓</text>`;
   });
-  const rowEls = model.rows.slice(0, 5).map((r, i) => marquee(r, i, 110 + i * 38));
-  const cmds = model.commands.map((c, i) => {
+  const shown = model.rows.slice(0, 5);
+  const pitch = Math.min(54, 220 / Math.max(shown.length, 1));
+  const top = 80 + (220 - shown.length * pitch) / 2 + (pitch - 22) / 2;
+  const rowEls = shown.map((r, i) => marquee(r, i, Math.round(top + i * pitch)));
+  const runMode = model.commands.length >= 2;
+  const list = runMode ? model.commands : model.inside.slice(0, 6);
+  const cmds = list.map((c, i) => {
     const y = 84 + i * 40;
     return `<rect class="slot" x="748" y="${y}" width="214" height="30" rx="6"/>
   <rect class="lit out" style="animation-delay:${(i * 2.5).toFixed(1)}s" x="748" y="${y}" width="214" height="30" rx="6"/>
-  <text class="file" x="758" y="${y + 20}"><tspan class="dollar">$ </tspan>${esc(clip(c, 24))}</text>`;
+  <text class="file" x="758" y="${y + 20}">${runMode ? '<tspan class="dollar">$ </tspan>' : `<tspan class="dollar">${i + 1}  </tspan>`}${esc(clip(c, 24))}</text>`;
   });
   const tagline = model.tagline ? clip(model.tagline, 46) : `${model.sections} sections`;
   const desc = `${model.title}: ${model.blocks} building blocks across ${model.rows.map((r) => r.label).join(', ')}.`;
@@ -100,6 +105,7 @@ export function renderSvg(model) {
     .from, .out { animation: bring 10s linear infinite; }
     .tick { opacity: 0; font-size: 12px; }
     @keyframes bring { 0% { opacity: 0; } 4% { opacity: 1; } 16% { opacity: 1; } 22%, 100% { opacity: 0; } }
+    .axis { stroke: #1f9d6b; stroke-opacity: .25; }
     .flow { fill: #1f9d6b; opacity: 0; animation: flow 1.2s linear infinite; }
     .f2 { animation-delay: .4s; } .f3 { animation-delay: .8s; }
     @keyframes flow { 0% { opacity: 0; transform: translateX(0); } 25%, 75% { opacity: 1; } 100% { opacity: 0; transform: translateX(14px); } }
@@ -135,12 +141,14 @@ export function renderSvg(model) {
   <text class="kick" x="266" y="32">${esc(clip(model.title, 22).toUpperCase())}<tspan class="sub" dx="10" style="letter-spacing:0;font-weight:400">· ${model.blocks} building blocks</tspan></text>
   <text class="head" x="266" y="53">${esc(tagline)}<tspan class="cursor"> _</tspan></text>
   ${rowEls.map((r) => r.svg).join('\n  ')}
+  <line class="axis" x1="242" y1="312" x2="706" y2="312"/>
+  ${[[model.blocks, 'building blocks'], [model.sections, 'sections'], [model.commands.length, 'commands']].map(([n, l], i) => `<text class="count" x="${242 + i * 156}" y="346">${n}</text><text class="what" x="${242 + i * 156}" y="364">${l}</text>`).join('\n  ')}
   <circle class="flow" cx="735" cy="200" r="2.3"/><circle class="flow f2" cx="735" cy="200" r="2.3"/><circle class="flow f3" cx="735" cy="200" r="2.3"/>
 
   <rect class="card" x="750" y="10" width="320" height="380" rx="12"/>
-  <text class="num" x="764" y="32">03</text><text class="kick" x="786" y="32">RUN</text>
-  <text class="head" x="764" y="53">commands from the README</text>
-  ${cmds.length ? cmds.join('\n  ').replace(/x="748"/g, 'x="764"').replace(/x="758"/g, 'x="774"').replace(/width="214"/g, 'width="290"') : '<text class="sub" x="764" y="84">no shell commands found</text>'}
+  <text class="num" x="764" y="32">03</text><text class="kick" x="786" y="32">${runMode ? 'RUN' : 'INSIDE'}</text>
+  <text class="head" x="764" y="53">${runMode ? 'commands from the README' : 'what the README covers'}</text>
+  ${cmds.length ? cmds.join('\n  ').replace(/x="748"/g, 'x="764"').replace(/x="758"/g, 'x="774"').replace(/width="214"/g, 'width="290"') : '<text class="sub" x="764" y="84">nothing to list yet</text>'}
 </svg>
 `;
 }
