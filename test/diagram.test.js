@@ -185,6 +185,8 @@ test('edit link: uses the real branch and README file, falls back to HEAD', asyn
   const { resultPage } = await import('../src/page.js');
   const ok = async () => Response.json({ html_url: 'https://github.com/o/r/blob/trunk/docs/readme.md' });
   assert.equal(await readmeEditUrl('o', 'r', { fetchImpl: ok }), 'https://github.com/o/r/edit/trunk/docs/readme.md');
+  const limited = async (u) => (String(u).startsWith('https://api.github.com') ? new Response('', { status: 403 }) : new Response('x "defaultBranch":"trunk" y'));
+  assert.equal(await readmeEditUrl('o', 'r', { fetchImpl: limited }), 'https://github.com/o/r/edit/trunk/README.md');
   assert.equal(await readmeEditUrl('o', 'r', { fetchImpl: async () => new Response('', { status: 403 }) }), null);
   assert.equal(await readmeEditUrl('o', 'r', { fetchImpl: async () => { throw new Error('x'); } }), null);
   assert.match(resultPage('https://d', 'o/r', 'https://github.com/o/r/edit/trunk/docs/readme.md'), /href="https:\/\/github\.com\/o\/r\/edit\/trunk\/docs\/readme\.md"/);
