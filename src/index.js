@@ -6,6 +6,9 @@ import { ICON, page, resultPage } from './page.js';
 
 const SVG = { 'content-type': 'image/svg+xml; charset=utf-8', 'cache-control': 'public, max-age=3600, s-maxage=86400', 'access-control-allow-origin': '*' };
 
+// Bump when the renderer changes: it is part of the edge-cache key, so old diagrams are not served for a day.
+export const RENDER_VERSION = '2';
+
 export default {
   async fetch(request, env = {}, ctx) {
     const url = new URL(request.url);
@@ -40,7 +43,8 @@ export default {
       const [, owner, repo, ext] = m;
       if (!validRepo(owner, repo)) return new Response('bad repo', { status: 400 });
       const cache = typeof caches !== 'undefined' ? caches.default : null;
-      const hit = cache && (await cache.match(request));
+      const key = new Request(`${url.origin}${url.pathname}?rv=${RENDER_VERSION}`);
+      const hit = cache && (await cache.match(key));
       if (hit) return hit;
       const loaded = await loadRepo(owner, repo, { token: env.GITHUB_TOKEN });
       if (loaded.error) return new Response(loaded.error, { status: loaded.error === 'not-found' ? 404 : 502 });
@@ -49,7 +53,7 @@ export default {
       const res = ext === 'json'
         ? new Response(JSON.stringify(q), { headers: { ...SVG, 'content-type': 'application/json' } })
         : new Response(renderSvg(model), { headers: { ...SVG, 'x-diagram-quality': q.ok ? 'good' : 'thin' } });
-      if (cache && ctx) ctx.waitUntil(cache.put(request, res.clone()));
+      if (cache && ctx) ctx.waitUntil(cache.put(key, res.clone()));
       return res;
     }
     return new Response('not found', { status: 404 });
