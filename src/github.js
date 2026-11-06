@@ -15,8 +15,17 @@ export async function loadRepo(owner, repo, { fetchImpl = fetch, token } = {}) {
     return { error: 'not-found', status: 404 };
   } else {
     // API rate-limited (shared Worker IPs): raw.githubusercontent.com has no such limit.
-    const raw = await fetchImpl(`https://raw.githubusercontent.com/${owner}/${repo}/HEAD/README.md`, { headers: { 'user-agent': 'readme-diagram' } });
-    if (!raw.ok) return { error: raw.status === 404 ? 'not-found' : 'github-error', status: raw.status };
+    // Raw has no rate limit but needs the file name: try the common spellings.
+    let raw = null;
+    for (const name of ['README.md', 'readme.md', 'Readme.md', 'README.markdown', 'README']) {
+      const res = await fetchImpl(`https://raw.githubusercontent.com/${owner}/${repo}/HEAD/${name}`, { headers: { 'user-agent': 'readme-diagram' } });
+      if (res.ok) {
+        raw = res;
+        break;
+      }
+      if (res.status !== 404) return { error: 'github-error', status: res.status };
+    }
+    if (!raw) return { error: 'not-found', status: 404 };
     readme = await raw.text();
   }
   if (readme.length > 400_000) return { error: 'too-large' };

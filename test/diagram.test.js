@@ -192,3 +192,12 @@ test('edit link: uses the real branch and README file, falls back to HEAD', asyn
   assert.match(resultPage('https://d', 'o/r', 'https://github.com/o/r/edit/trunk/docs/readme.md'), /href="https:\/\/github\.com\/o\/r\/edit\/trunk\/docs\/readme\.md"/);
   assert.match(resultPage('https://d', 'o/r', null), /edit\/HEAD\/README\.md/);
 });
+
+test('github: raw fallback tries readme.md when README.md is missing', async () => {
+  const { loadRepo } = await import('../src/github.js');
+  const fetchImpl = async (u) => {
+    if (u.startsWith('https://api.github.com')) return new Response('', { status: 403 });
+    return u.endsWith('/readme.md') ? new Response('# low\n') : new Response('', { status: 404 });
+  };
+  assert.equal((await loadRepo('a', 'b', { fetchImpl })).readme, '# low\n');
+});
