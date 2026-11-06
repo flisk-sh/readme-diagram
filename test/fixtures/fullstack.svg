@@ -190,7 +190,7 @@
   <rect class="lit out" style="animation-delay:4.5s" x="750" y="217" width="136" height="22" rx="6"/>
   <text class="file" style="font-size:11.5px" x="758" y="232">Stack</text>
   <text class="note" x="752" y="356">straight from the README</text>
-  <text class="cmd" x="752" y="376"><tspan>$</tspan> cat README.md</text>
+
   <circle class="flow" cx="903" cy="200" r="2.3"/><circle class="flow f2" cx="903" cy="200" r="2.3"/><circle class="flow f3" cx="903" cy="200" r="2.3"/>
 
   <rect class="card" x="916" y="10" width="154" height="380" rx="12"/>
@@ -221,5 +221,5 @@
   <circle class="ok" cx="934" cy="333" r="3.5"/>
   <text class="note" x="944" y="336">8 parts found</text>
   <text class="note" x="930" y="354">stack · files · docs</text>
-  <text class="cmd" x="930" y="376"><tspan>$</tspan> git log</text>
+  
 </svg>

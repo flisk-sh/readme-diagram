@@ -1,5 +1,8 @@
 // README markdown -> plain facts. No network, no LLM: headings, badges, code fences, lists.
 
+// A line only counts as a command when it starts with a program people actually run.
+const RUNNABLE = /^(npm|npx|pnpm|yarn|bun|bunx|deno|node|pip3?|pipx|uv|uvx|poetry|python3?|cargo|rustup|go|docker|docker-compose|make|git|gh|brew|curl|wget|sudo|apt|apt-get|dotnet|mvn|gradle|bundle|gem|composer|flisk|tilt|kubectl|helm|terraform|\.\/[\w.-]+|bash|sh)\s/;
+
 const SHELL = new Set(['bash', 'sh', 'shell', 'zsh', 'console', 'terminal']);
 
 export function parseReadme(md) {
@@ -28,7 +31,7 @@ export function parseReadme(md) {
     }
     if (inFence) {
       const line = raw.trim().replace(/^\$\s+/, '');
-      if ((SHELL.has(fenceLang) || fenceLang === '') && line && !line.startsWith('#') && commands.length < 40) {
+      if ((SHELL.has(fenceLang) || fenceLang === '') && RUNNABLE.test(line) && !commands.includes(line) && commands.length < 40) {
         commands.push(line);
       }
       continue;

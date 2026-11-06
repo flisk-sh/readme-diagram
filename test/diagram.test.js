@@ -18,9 +18,9 @@ test('parse: title, tagline, sections, shell commands', () => {
 });
 
 test('parse: ignores headings inside code fences and handles CRLF', () => {
-  const p = parseReadme('# A\r\n\r\n```bash\r\n# comment\r\nls\r\n```\r\n## B\r\n');
+  const p = parseReadme('# A\r\n\r\n```bash\r\n# comment\r\nnpm test\r\n```\r\n## B\r\n');
   assert.deepEqual(p.sections.map((s) => s.title), ['B']);
-  assert.deepEqual(p.commands, ['ls']);
+  assert.deepEqual(p.commands, ['npm test']);
 });
 
 test('parse: empty and non-string input do not throw', () => {
@@ -200,4 +200,23 @@ test('github: raw fallback tries readme.md when README.md is missing', async () 
     return u.endsWith('/readme.md') ? new Response('# low\n') : new Response('', { status: 404 });
   };
   assert.equal((await loadRepo('a', 'b', { fetchImpl })).readme, '# low\n');
+});
+
+test('commands: only real runnable commands, never invented filler', () => {
+  const svg = renderSvg(buildModel('# T\n\nA project long enough to have a tagline here.\n\n## Docs\n\nNothing to run.\n', [], 'o/t'));
+  for (const fake of ['cat README.md', 'git log', 'open README.md', 'git clone t']) assert.ok(!svg.includes(fake), fake);
+  assert.match(svg, /gh repo clone o\/t/);
+  const p = parseReadme('```bash\necho hi\n./deploy.sh\nnpm run dev\nOutput: ok\n```\n');
+  assert.deepEqual(p.commands, ['npm run dev']);
+});
+
+test('detect: a long README must mention a thing twice; "claude" alone is not Anthropic', () => {
+  const long = `# X\n\n${'filler text. '.repeat(400)}\nOnce: Rust. Ask claude for help.\n`;
+  const d = detect(parseReadme(long));
+  assert.ok(!d.languages.includes('Rust') && !d.services.includes('Anthropic'));
+});
+
+test('model: sponsor and generic headings do not become sections', () => {
+  const m = buildModel('# X\n\nA tagline that is long enough to count.\n\n## Gold Sponsors\n## Community\n## Real Feature\n');
+  assert.deepEqual(m.inside, ['Real Feature']);
 });

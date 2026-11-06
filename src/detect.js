@@ -9,7 +9,7 @@ const LANGUAGES = {
   Java: /\bjava\b|\bmaven\b|\bgradle\b|\bkotlin\b|\bspring boot\b/i,
   Ruby: /\bruby\b|\brails\b|\bgem\b|\bbundler\b/i,
   PHP: /\bphp\b|\bcomposer\b|\blaravel\b/i,
-  'C#': /\bc#|\.net\b|\bdotnet\b/i,
+  'C#': /\bc#|\bdotnet\b|\.net (core|framework|sdk|\d)/i,
   Swift: /\bswift(ui)?\b/i,
   Elixir: /\belixir\b|\bphoenix\b/i,
   Bun: /\bbun\b (install|run|add|x)/i,
@@ -53,7 +53,7 @@ const SERVICES = {
   Qdrant: /\bqdrant\b/i,
   Ollama: /\bollama\b/i,
   OpenAI: /\bopenai\b/i,
-  Anthropic: /\banthropic\b|\bclaude\b/i,
+  Anthropic: /\banthropic\b|claude code|claude api|\bclaude (sonnet|opus|haiku)\b/i,
   MCP: /\bmcp\b|model context protocol/i,
   Prisma: /\bprisma\b/i,
   GraphQL: /\bgraphql\b/i,
@@ -76,10 +76,10 @@ const FILES = [
   ['.env.example', /\.env(\.example)?\b/i],
 ];
 
-function pick(dict, text) {
+function pick(dict, text, min = 1) {
   return Object.entries(dict)
     .map(([name, re]) => ({ name, hits: (text.match(new RegExp(re.source, `${re.flags.replace('g', '')}g`)) ?? []).length }))
-    .filter((x) => x.hits > 0)
+    .filter((x) => x.hits >= min)
     .sort((a, b) => b.hits - a.hits || a.name.localeCompare(b.name))
     .map((x) => x.name);
 }
@@ -87,16 +87,18 @@ function pick(dict, text) {
 export function detect(parsed, repoFiles = []) {
   const names = repoFiles.join('\n');
   const text = `${parsed.text}\n${names}`;
+  // A long README mentions many things in passing; only count what it comes back to.
+  const min = parsed.text.length > 3000 ? 2 : 1;
   const files = FILES.filter(([, re]) => re.test(text)).map(([f]) => f);
-  const langs = pick(LANGUAGES, text);
+  const langs = pick(LANGUAGES, text, min);
   for (const l of parsed.fenceLangs) {
     const canon = { ts: 'TypeScript', typescript: 'TypeScript', js: 'JavaScript', javascript: 'JavaScript', py: 'Python', python: 'Python', go: 'Go', rust: 'Rust', rs: 'Rust', java: 'Java', ruby: 'Ruby', php: 'PHP' }[l];
     if (canon && !langs.includes(canon)) langs.push(canon);
   }
   return {
     languages: langs.slice(0, 8),
-    frameworks: pick(FRAMEWORKS, text).slice(0, 12),
-    services: pick(SERVICES, text).slice(0, 12),
+    frameworks: pick(FRAMEWORKS, text, min).slice(0, 12),
+    services: pick(SERVICES, text, min).slice(0, 12),
     files: files.slice(0, 4),
   };
 }

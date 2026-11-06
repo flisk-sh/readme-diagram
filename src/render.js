@@ -112,7 +112,7 @@ export function renderSvg(model) {
   <text class="file" x="32" y="${y + 17}">${esc(clip(f, 18))}</text>
   <text class="tick from" style="${dl}" x="182" y="${y + 17}">✓</text>`;
   });
-  const cmd0 = model.commands[0] ? clip(model.commands[0], 24) : `git clone ${clip(model.title, 12)}`;
+  const cmd0 = model.commands[0] ? clip(model.commands[0], 24) : model.slug && model.slug.includes('/') ? clip(`gh repo clone ${model.slug}`, 24) : '';
 
   // 02 hero
   const shown = model.rows.slice(0, 5);
@@ -224,7 +224,7 @@ export function renderSvg(model) {
   ${left.svg}
   ${files.length ? `<text class="sub" x="24" y="${fy - 8}">from what you have</text>` : ''}
   ${files.join('\n  ')}
-  <text class="cmd" x="24" y="376"><tspan>$</tspan> ${esc(cmd0)}</text>
+  ${cmd0 ? `<text class="cmd" x="24" y="376"><tspan>$</tspan> ${esc(cmd0)}</text>` : ''}
   <circle class="flow" cx="215" cy="200" r="2.3"/><circle class="flow f2" cx="215" cy="200" r="2.3"/><circle class="flow f3" cx="215" cy="200" r="2.3"/>
 
   <rect class="hero" x="228" y="10" width="492" height="380" rx="12"/>
@@ -234,7 +234,7 @@ export function renderSvg(model) {
   <text class="head" x="266" y="53">${esc(tagline)}<tspan class="cursor"> _</tspan></text>
   ${bigs.join('\n  ')}
   ${rows.map((r) => r.svg).join('\n  ')}
-  <text class="cmd" x="242" y="376"><tspan>$</tspan> ${esc(clip(model.commands[1] || model.commands[0] || 'open README.md', 36))}<tspan> · ${model.sections} sections · ${model.blocks} blocks</tspan></text>
+  <text class="cmd" x="242" y="376">${model.commands[1] || model.commands[0] ? `<tspan>$</tspan> ${esc(clip(model.commands[1] || model.commands[0], 36))}` : ''}<tspan>${model.commands[1] || model.commands[0] ? ' · ' : ''}${model.sections} sections · ${model.blocks} blocks</tspan></text>
   <circle class="flow" cx="723" cy="200" r="2.3"/><circle class="flow f2" cx="723" cy="200" r="2.3"/><circle class="flow f3" cx="723" cy="200" r="2.3"/>
 
   <rect class="card" x="738" y="10" width="160" height="380" rx="12"/>
@@ -245,7 +245,7 @@ export function renderSvg(model) {
   ${cmds.length && secs.length ? `<text class="sub" x="752" y="182">${model.inside.length} sections</text>` : ''}
   ${secEls.join('\n  ')}
   <text class="note" x="752" y="356">straight from the README</text>
-  <text class="cmd" x="752" y="376"><tspan>$</tspan> cat README.md</text>
+
   <circle class="flow" cx="903" cy="200" r="2.3"/><circle class="flow f2" cx="903" cy="200" r="2.3"/><circle class="flow f3" cx="903" cy="200" r="2.3"/>
 
   <rect class="card" x="916" y="10" width="154" height="380" rx="12"/>
@@ -261,7 +261,7 @@ export function renderSvg(model) {
   <circle class="ok" cx="934" cy="333" r="3.5"/>
   <text class="note" x="944" y="336">${tags.length} part${tags.length === 1 ? '' : 's'} found</text>
   <text class="note" x="930" y="354">stack · files · docs</text>
-  <text class="cmd" x="930" y="376"><tspan>$</tspan> ${esc(clip(model.commands[2] || 'git log', 14))}</text>
+  ${model.commands[2] ? `<text class="cmd" x="930" y="376"><tspan>$</tspan> ${esc(clip(model.commands[2], 14))}</text>` : ''}
 </svg>
 `;
 }
