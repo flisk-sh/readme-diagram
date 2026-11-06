@@ -258,7 +258,7 @@ export function renderSvg(model) {
   ${cmdEls.join('\n  ')}
   ${cmds.length && secs.length ? `<text class="sub" x="752" y="182">${model.inside.length} sections</text>` : ''}
   ${secEls.join('\n  ')}
-  <text class="note" x="752" y="356">README, plus repo scripts</text>
+  <text class="note" x="752" y="356">README + repo</text>
 
   <circle class="flow" cx="903" cy="200" r="2.3"/><circle class="flow f2" cx="903" cy="200" r="2.3"/><circle class="flow f3" cx="903" cy="200" r="2.3"/>
 
