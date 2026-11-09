@@ -58,7 +58,7 @@ function layout({ title, origin, body, path = '/' }) {
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <meta property="og:type" content="website"><meta property="og:site_name" content="README Diagram"><meta property="og:title" content="${t}"><meta property="og:description" content="${esc(DESC)}">
 <meta property="og:image" content="${esc(origin)}/flisk-sh/citable.svg"><meta name="twitter:card" content="summary_large_image">
-<style>${CSS}</style></head><body>
+<style>${CSS}</style><script src="https://flisk.si/assets/bar.js" defer></script></head><body>
 <header class="top stage"><nav class="wrap" aria-label="Site"><a href="/"><img src="/icon.svg" alt="" width="26" height="26">README Diagram</a><a href="https://github.com/flisk-sh/readme-diagram">Source</a></nav></header>
 ${body}
 <footer><div class="wrap">README Diagram: no AI, no sign-up, nothing stored. <a href="https://github.com/flisk-sh/readme-diagram">Open source</a>, made by <a href="https://flisk.sh">Flisk</a>.</div></footer>
