@@ -4,6 +4,7 @@ import { parseRepoInput } from './repo-input.js';
 import { renderSvg } from './render.js';
 import { authorizeUrl, clearNonceCookie, exchangeCode, newNonce, nonceCookie, readNonce, signState, verifyState } from './auth.js';
 import { APPLE_TOUCH_PNG, FAVICON_ICO } from './icons.js';
+import { OG_PNG } from './og.js';
 import { ICON, donePage, page, resultPage } from './page.js';
 import { PrError, createReadmePr } from './pr.js';
 
@@ -48,6 +49,9 @@ export default {
         const msg = e instanceof PrError ? e.message : 'Something went wrong talking to GitHub.';
         return html(donePage(origin, { repo: verified.repo, error: msg }), e instanceof PrError ? 422 : 502, clear);
       }
+    }
+    if (url.pathname === '/og.png' && (request.method === 'GET' || request.method === 'HEAD')) {
+      return new Response(request.method === 'HEAD' ? null : OG_PNG, { headers: { 'content-type': 'image/png', 'content-length': String(OG_PNG.byteLength), 'cache-control': 'public, max-age=86400' } });
     }
     if (url.pathname === '/icon.svg') return new Response(ICON, { headers: { 'content-type': 'image/svg+xml', 'cache-control': 'public, max-age=86400' } });
     if (url.pathname === '/favicon.ico') return new Response(FAVICON_ICO, { headers: { 'content-type': 'image/x-icon', 'cache-control': 'public, max-age=86400' } });

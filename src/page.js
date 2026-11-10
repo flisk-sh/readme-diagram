@@ -60,7 +60,8 @@ function layout({ title, origin, body, path = '/' }) {
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="website"><meta property="og:site_name" content="README Diagram"><meta property="og:title" content="${t}"><meta property="og:description" content="${esc(DESC)}">
-<meta property="og:image" content="${esc(origin)}/flisk-sh/citable.svg"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="${esc(origin + path)}"><meta property="og:image" content="${esc(origin)}/og.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="README Diagram: your README, as an animated diagram">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${esc(origin)}/og.png">
 <style>${CSS}</style><script src="https://flisk.si/assets/bar.js" defer></script></head><body>
 <header class="top stage"><nav class="wrap" aria-label="Site"><a href="/"><img src="/icon.svg" alt="" width="26" height="26">README Diagram</a><a href="https://github.com/flisk-sh/readme-diagram">Source</a></nav></header>
 ${body}
