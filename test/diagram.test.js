@@ -314,3 +314,22 @@ test('result page: the edit button copies the snippet and the steps say where to
   assert.match(html, /getElementById\('edit'\)\.addEventListener\('click'/);
   assert.match(html, /Ctrl\+V/);
 });
+
+test('site: share card is a 1200x630 PNG at an absolute og:image and twitter:image URL', async () => {
+  const env = { PUBLIC_ORIGIN: 'https://diagram.flisk.si' };
+  const home = await (await worker.fetch(new Request('https://x/'), env)).text();
+  assert.match(home, /<meta property="og:image" content="https:\/\/diagram\.flisk\.si\/og\.png">/);
+  assert.match(home, /<meta name="twitter:image" content="https:\/\/diagram\.flisk\.si\/og\.png">/);
+  assert.match(home, /<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">/);
+  const res = await worker.fetch(new Request('https://x/og.png'), env);
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get('content-type'), 'image/png');
+  const png = new Uint8Array(await res.arrayBuffer());
+  assert.deepEqual([...png.slice(1, 4)], [0x50, 0x4e, 0x47]);
+  const dv = new DataView(png.buffer);
+  assert.equal(dv.getUint32(16), 1200);
+  assert.equal(dv.getUint32(20), 630);
+  const head = await worker.fetch(new Request('https://x/og.png', { method: 'HEAD' }), env);
+  assert.equal(head.status, 200);
+  assert.equal(head.headers.get('content-type'), 'image/png');
+});
