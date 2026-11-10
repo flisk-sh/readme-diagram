@@ -3,6 +3,7 @@ import { buildModel, quality } from './model.js';
 import { parseRepoInput } from './repo-input.js';
 import { renderSvg } from './render.js';
 import { authorizeUrl, clearNonceCookie, exchangeCode, newNonce, nonceCookie, readNonce, signState, verifyState } from './auth.js';
+import { APPLE_TOUCH_PNG, FAVICON_ICO } from './icons.js';
 import { ICON, donePage, page, resultPage } from './page.js';
 import { PrError, createReadmePr } from './pr.js';
 
@@ -49,6 +50,8 @@ export default {
       }
     }
     if (url.pathname === '/icon.svg') return new Response(ICON, { headers: { 'content-type': 'image/svg+xml', 'cache-control': 'public, max-age=86400' } });
+    if (url.pathname === '/favicon.ico') return new Response(FAVICON_ICO, { headers: { 'content-type': 'image/x-icon', 'cache-control': 'public, max-age=86400' } });
+    if (url.pathname === '/apple-touch-icon.png') return new Response(APPLE_TOUCH_PNG, { headers: { 'content-type': 'image/png', 'cache-control': 'public, max-age=86400' } });
     if (url.pathname === '/check' && request.method === 'GET') {
       const raw = url.searchParams.get('repo') || '';
       const repo = parseRepoInput(raw);

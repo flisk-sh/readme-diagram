@@ -148,6 +148,28 @@ test('site: landing, check redirect, result page, icon', async () => {
   assert.equal((await get('/icon.svg')).headers.get('content-type'), 'image/svg+xml');
 });
 
+test('site: favicon, apple-touch icon and header use the canonical README Diagram mark', async () => {
+  const env = { PUBLIC_ORIGIN: 'https://diagram.flisk.si' };
+  const get = (u) => worker.fetch(new Request(`https://x${u}`), env);
+  const svg = await (await get('/icon.svg')).text();
+  assert.match(svg, /fill="#7c3aed"/);
+  assert.match(svg, /aria-label="README Diagram"/);
+  const ico = await get('/favicon.ico');
+  assert.equal(ico.headers.get('content-type'), 'image/x-icon');
+  const icoBytes = new Uint8Array(await ico.arrayBuffer());
+  assert.deepEqual([...icoBytes.slice(0, 6)], [0, 0, 1, 0, 2, 0]);
+  const png = await get('/apple-touch-icon.png');
+  assert.equal(png.headers.get('content-type'), 'image/png');
+  const pngBytes = new Uint8Array(await png.arrayBuffer());
+  assert.deepEqual([...pngBytes.slice(1, 4)], [0x50, 0x4e, 0x47]);
+  assert.equal(new DataView(pngBytes.buffer).getUint32(16), 180);
+  const home = await (await get('/')).text();
+  assert.match(home, /<link rel="icon" href="\/favicon\.ico" sizes="32x32">/);
+  assert.match(home, /<link rel="icon" href="\/icon\.svg" type="image\/svg\+xml">/);
+  assert.match(home, /<link rel="apple-touch-icon" href="\/apple-touch-icon\.png">/);
+  assert.match(home, /<header[^>]*>.*<img src="\/icon\.svg"[^>]*>README Diagram/);
+});
+
 test('site: hostile repo path cannot inject into the result page', async () => {
   const res = await worker.fetch(new Request('https://x/a%22%3E%3Cscript%3E/b'), {});
   assert.ok(res.status === 400 || !(await res.text()).includes('<script>alert'));

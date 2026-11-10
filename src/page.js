@@ -1,7 +1,8 @@
 import { parseRepoInput } from './repo-input.js';
 import { esc } from './render.js';
 
-export const ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#07080c"/><path d="M18 3 7 18h8l-3 11 13-17h-8z" fill="#5ee0a0" stroke="#1f9d6b" stroke-width="1" stroke-linejoin="round"/></svg>`;
+// Canonical mark from flisk-sh/flisk-emoji (apps/readme-diagram.svg).
+export const ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="README Diagram"><title>README Diagram</title><rect width="64" height="64" rx="14" fill="#7c3aed"/><rect x="24" y="11" width="16" height="12" rx="3" fill="#fbfaf7"/><rect x="9" y="41" width="18" height="12" rx="3" fill="#fbfaf7"/><rect x="37" y="41" width="18" height="12" rx="3" fill="#fbfaf7"/><path d="M32 23v9M18 41v-9h28v9" fill="none" stroke="#fbfaf7" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 const CSS = `
 :root{--bg:#fbfaf7;--fg:#141413;--muted:#66635c;--line:#e3e0d7;--card:#fff;--accent:#1f9d6b;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
@@ -55,7 +56,9 @@ function layout({ title, origin, body, path = '/' }) {
 <link rel="canonical" href="${esc(origin + path)}">
 <meta name="theme-color" content="#07080c">
 <meta name="color-scheme" content="light dark">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="website"><meta property="og:site_name" content="README Diagram"><meta property="og:title" content="${t}"><meta property="og:description" content="${esc(DESC)}">
 <meta property="og:image" content="${esc(origin)}/flisk-sh/citable.svg"><meta name="twitter:card" content="summary_large_image">
 <style>${CSS}</style><script src="https://flisk.si/assets/bar.js" defer></script></head><body>
