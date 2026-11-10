@@ -333,3 +333,13 @@ test('site: share card is a 1200x630 PNG at an absolute og:image and twitter:ima
   assert.equal(head.status, 200);
   assert.equal(head.headers.get('content-type'), 'image/png');
 });
+
+test('robots.txt points search engines at the sitemap, which lists the home page', async () => {
+  const robots = await worker.fetch(new Request('https://x/robots.txt'), {});
+  assert.equal(robots.status, 200);
+  assert.match(await robots.text(), /^Sitemap: https:\/\/diagram\.flisk\.si\/sitemap\.xml$/m);
+  const sitemap = await worker.fetch(new Request('https://x/sitemap.xml'), {});
+  assert.equal(sitemap.status, 200);
+  assert.match(sitemap.headers.get('content-type'), /application\/xml/);
+  assert.match(await sitemap.text(), /<loc>https:\/\/diagram\.flisk\.si\/<\/loc>/);
+});

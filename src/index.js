@@ -8,6 +8,10 @@ import { OG_PNG } from './og.js';
 import { ICON, donePage, page, resultPage } from './page.js';
 import { PrError, createReadmePr } from './pr.js';
 
+// Search engines: crawl the page, skip the endpoints that render or sign in, and find the sitemap.
+export const ROBOTS = 'User-agent: *\nAllow: /\nDisallow: /render\nDisallow: /auth/\nDisallow: /check\n\nSitemap: https://diagram.flisk.si/sitemap.xml\n';
+export const SITEMAP = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://diagram.flisk.si/</loc></url></urlset>\n';
+
 const SVG = { 'content-type': 'image/svg+xml; charset=utf-8', 'cache-control': 'public, max-age=3600, s-maxage=86400', 'access-control-allow-origin': '*' };
 
 // Bump when the renderer changes: it is part of the edge-cache key, so old diagrams are not served for a day.
@@ -53,6 +57,8 @@ export default {
     if (url.pathname === '/og.png' && (request.method === 'GET' || request.method === 'HEAD')) {
       return new Response(request.method === 'HEAD' ? null : OG_PNG, { headers: { 'content-type': 'image/png', 'content-length': String(OG_PNG.byteLength), 'cache-control': 'public, max-age=86400' } });
     }
+    if (url.pathname === '/robots.txt') return new Response(ROBOTS, { headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'public, max-age=86400' } });
+    if (url.pathname === '/sitemap.xml') return new Response(SITEMAP, { headers: { 'content-type': 'application/xml; charset=utf-8', 'cache-control': 'public, max-age=86400' } });
     if (url.pathname === '/icon.svg') return new Response(ICON, { headers: { 'content-type': 'image/svg+xml', 'cache-control': 'public, max-age=86400' } });
     if (url.pathname === '/favicon.ico') return new Response(FAVICON_ICO, { headers: { 'content-type': 'image/x-icon', 'cache-control': 'public, max-age=86400' } });
     if (url.pathname === '/apple-touch-icon.png') return new Response(APPLE_TOUCH_PNG, { headers: { 'content-type': 'image/png', 'cache-control': 'public, max-age=86400' } });
