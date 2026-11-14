@@ -343,3 +343,9 @@ test('robots.txt points search engines at the sitemap, which lists the home page
   assert.match(sitemap.headers.get('content-type'), /application\/xml/);
   assert.match(await sitemap.text(), /<loc>https:\/\/diagram\.flisk\.si\/<\/loc>/);
 });
+
+test('the page loads Flisk Analytics in <head>', async () => {
+  const html = await (await worker.fetch(new Request('https://diagram.test/'), {})).text();
+  const head = html.slice(html.indexOf('<head>'), html.indexOf('</head>'));
+  assert.ok(head.includes('<script defer data-domain="diagram.flisk.si" src="https://flisk.sh/a.js"></script>'));
+});
