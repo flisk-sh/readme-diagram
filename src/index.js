@@ -107,6 +107,13 @@ const app = {
 
 export default {
   async fetch(request, env = {}, ctx) {
-    return withSecurityHeaders(await app.fetch(request, env, ctx));
+    if (request.method !== 'HEAD') return withSecurityHeaders(await app.fetch(request, env, ctx));
+
+    // Match the public GET route without starting an OAuth flow.
+    const path = new URL(request.url).pathname;
+    const routed = path.startsWith('/auth/') ? request : new Request(request, { method: 'GET' });
+    const response = await app.fetch(routed, env, ctx);
+    await response.body?.cancel();
+    return withSecurityHeaders(new Response(null, response));
   },
 };
