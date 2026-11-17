@@ -62,7 +62,9 @@ function layout({ title, origin, body, path = '/' }) {
 <meta property="og:type" content="website"><meta property="og:site_name" content="README Diagram"><meta property="og:title" content="${t}"><meta property="og:description" content="${esc(DESC)}">
 <meta property="og:url" content="${esc(origin + path)}"><meta property="og:image" content="${esc(origin)}/og.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="README Diagram: your README, as an animated diagram">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${esc(origin)}/og.png">
-<style>${CSS}</style><script defer data-domain="diagram.flisk.si" src="https://flisk.sh/a.js"></script><script src="https://flisk.si/assets/bar.js" defer></script></head><body>
+<style>${CSS}.skip-link{position:absolute;top:0;left:0;z-index:1000;transform:translateY(-120%);background:#fff;color:#111;padding:.5rem 1rem}
+.skip-link:focus{transform:none}
+</style><script defer data-domain="diagram.flisk.si" src="https://flisk.sh/a.js"></script><script src="https://flisk.si/assets/bar.js" defer></script></head><body><a class="skip-link" href="#main-content">Skip to content</a>
 <header class="top stage"><nav class="wrap" aria-label="Site"><a href="/"><img src="/icon.svg" alt="" width="26" height="26">README Diagram</a><a href="https://github.com/flisk-sh/readme-diagram">Source</a></nav></header>
 ${body}
 <footer><div class="wrap">README Diagram: no AI, no sign-up, nothing stored. <a href="https://github.com/flisk-sh/readme-diagram">Open source</a>, made by <a href="https://flisk.sh">Flisk</a>.</div></footer>
@@ -76,7 +78,7 @@ export function page(origin, { error = '', value = '' } = {}) {
   return layout({
     title: 'README Diagram: your README as an animated SVG',
     origin,
-    body: `<main><section class="hero stage"><div class="wrap">
+    body: `<main id="main-content" tabindex="-1"><section class="hero stage"><div class="wrap">
 <h1 class="grad">Your README, as an animated diagram</h1>
 <p class="lede">Paste a GitHub repo. Get an animated SVG for the top of its README: your stack, sections and commands, drawn in one picture.</p>
 ${error ? `<p class="error" role="alert">${esc(error)}</p>` : ''}${form(value)}
@@ -102,7 +104,7 @@ export function resultPage(origin, repo, editUrl, { oauth = false } = {}) {
     title: `${repo} diagram · README Diagram`,
     origin,
     path: `/${repo}`,
-    body: `<main><section class="hero stage"><div class="wrap">
+    body: `<main id="main-content" tabindex="-1"><section class="hero stage"><div class="wrap">
 <h1 class="grad">${esc(repo)}</h1>
 <p class="lede">Your diagram is ready. Copy the snippet to the top of the README.</p>
 <p id="err" class="error" role="alert" hidden>Could not load a README for ${esc(repo)}. Is the repo public and does it have a README?</p>
@@ -126,7 +128,7 @@ export function donePage(origin, { repo, url, forked, error }) {
   const body = error
     ? `<h1 class="grad">Not this time</h1><p class="lede">${esc(error)}</p><div class="row"><a class="btn" href="/${esc(repo || '')}">Back to the diagram</a></div>`
     : `<h1 class="grad">Pull request opened</h1><p class="lede">${forked ? 'We forked the repo to your account and ' : ''}opened a pull request that adds the diagram to the README of ${esc(repo)}.</p><div class="row"><a class="btn" href="${esc(url)}">View the pull request</a><a class="btn ghost" href="/">Another repo</a></div>`;
-  return layout({ title: error ? 'README Diagram: not this time' : 'README Diagram: pull request opened', origin, path: '/auth/callback', body: `<main><section class="hero stage"><div class="wrap">${body}</div></section></main>` });
+  return layout({ title: error ? 'README Diagram: not this time' : 'README Diagram: pull request opened', origin, path: '/auth/callback', body: `<main id="main-content" tabindex="-1"><section class="hero stage"><div class="wrap">${body}</div></section></main>` });
 }
 
 export { parseRepoInput };
