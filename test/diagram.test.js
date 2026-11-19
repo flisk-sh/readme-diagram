@@ -96,6 +96,18 @@ test('worker: landing page and /ready', async () => {
   assert.equal((await worker.fetch(new Request('https://x/nope'), {})).status, 404);
 });
 
+test('worker: /llms.txt describes the site and is cacheable', async () => {
+  const res = await worker.fetch(new Request('https://diagram.flisk.si/llms.txt'), {});
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get('content-type'), /^text\/plain/);
+  assert.equal(res.headers.get('cache-control'), 'public, max-age=86400');
+  const body = await res.text();
+  assert.match(body, /^# Flisk Diagram/);
+  assert.match(body, /Turn a GitHub README into a one-page architecture diagram/);
+  assert.match(body, /- Home: https:\/\/diagram\.flisk\.si\//);
+  assert.match(body, /- Sitemap: https:\/\/diagram\.flisk\.si\/sitemap\.xml/);
+});
+
 test('render: long tagline is clipped to fit the hero card', () => {
   const svg = renderSvg(buildModel(`# T\n\n${'word '.repeat(40)}\n`));
   const head = svg.match(/class="head" x="266" y="53">([^<]*)</)[1];
