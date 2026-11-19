@@ -73,7 +73,20 @@ const app = {
       return Response.redirect(`${origin}/${repo}`, 302);
     }
     if (url.pathname === '/render' && request.method === 'POST') {
-      const md = await request.text();
+      const type = (request.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+      const body = await request.text();
+      let md = body;
+      if (type === 'application/json') {
+        try {
+          const parsed = JSON.parse(body);
+          if (typeof parsed?.markdown !== 'string') return new Response('markdown must be a string', { status: 400, headers: { 'content-type': 'text/plain; charset=utf-8' } });
+          md = parsed.markdown;
+        } catch {
+          return new Response('invalid JSON body', { status: 400, headers: { 'content-type': 'text/plain; charset=utf-8' } });
+        }
+      } else if (type && type !== 'text/markdown' && type !== 'text/plain') {
+        return new Response('unsupported content type: use text/markdown, text/plain or application/json', { status: 415, headers: { 'content-type': 'text/plain; charset=utf-8' } });
+      }
       if (md.length > 400_000) return new Response('README too large', { status: 413 });
       return new Response(renderSvg(buildModel(md)), { headers: { ...SVG, 'cache-control': 'no-store' } });
     }

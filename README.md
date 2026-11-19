@@ -3,8 +3,14 @@
 Turn any GitHub README into an animated SVG diagram. No LLM: it reads headings, code fences and the stack the README mentions, then draws the same three-card layout as Flisk's ecosystem diagram.
 
 - `GET /<owner>/<repo>.svg` renders a repo's diagram (cached a day at the edge).
-- `POST /render` with Markdown in the body returns the SVG.
+- `POST /render` with Markdown in the body returns the SVG. Use `content-type: text/markdown`, `text/plain`, or `application/json` with a `markdown` string field; other content types get `415`.
 - `/` is a preview page with a copy-snippet button and an "Open README on GitHub" link.
+
+```bash
+curl -s -X POST https://diagram.flisk.si/render \
+  -H 'content-type: application/json' \
+  --data '{"markdown":"# slugkit\n\nTurn titles into slugs.\n"}'
+```
 
 ```bash
 npm test
