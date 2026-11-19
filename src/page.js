@@ -8,6 +8,7 @@ const CSS = `
 :root{--bg:#fbfaf7;--fg:#141413;--muted:#66635c;--line:#e3e0d7;--card:#fff;--accent:#1f9d6b;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
 @media (prefers-color-scheme:dark){:root{--bg:#141413;--fg:#eceae4;--muted:#a29f97;--line:#272a31;--card:#16181d;--accent:#5ee0a0}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.skip-link{position:absolute;left:-9999px;top:0;z-index:100;padding:10px 14px;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;font-weight:600}.skip-link:focus{left:12px;top:12px;outline:2px solid var(--accent);outline-offset:2px}
 a{color:var(--accent);text-underline-offset:3px}.wrap{max-width:880px;margin:0 auto;padding:0 20px}
 .stage{position:relative;overflow:hidden;background:#07080c;color:#f4f3ef;--fg:#f4f3ef;--muted:#b0afba;--line:#262833;--card:#11131a;--accent:#5ee0a0}
 .stage::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(60% 65% at 50% 38%,#000,transparent 75%);mask-image:radial-gradient(60% 65% at 50% 38%,#000,transparent 75%)}
@@ -62,7 +63,7 @@ function layout({ title, origin, body, path = '/' }) {
 <meta property="og:type" content="website"><meta property="og:site_name" content="README Diagram"><meta property="og:title" content="${t}"><meta property="og:description" content="${esc(DESC)}">
 <meta property="og:url" content="${esc(origin + path)}"><meta property="og:image" content="${esc(origin)}/og.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="README Diagram: your README, as an animated diagram">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${esc(origin)}/og.png">
-<style>${CSS}</style><script defer data-domain="diagram.flisk.si" src="https://flisk.sh/a.js"></script><script src="https://flisk.si/assets/bar.js" defer></script></head><body>
+<style>${CSS}</style><script defer data-domain="diagram.flisk.si" src="https://flisk.sh/a.js"></script><script src="https://flisk.si/assets/bar.js" defer></script></head><body><a class="skip-link" href="#main">Skip to content</a>
 <header class="top stage"><nav class="wrap" aria-label="Site"><a href="/"><img src="/icon.svg" alt="" width="26" height="26">README Diagram</a><a href="https://github.com/flisk-sh/readme-diagram">Source</a></nav></header>
 ${body}
 <footer><div class="wrap">README Diagram: no AI, no sign-up, nothing stored. <a href="https://github.com/flisk-sh/readme-diagram">Open source</a>, made by <a href="https://flisk.sh">Flisk</a>.</div></footer>
@@ -76,7 +77,7 @@ export function page(origin, { error = '', value = '' } = {}) {
   return layout({
     title: 'README Diagram: your README as an animated SVG',
     origin,
-    body: `<main><section class="hero stage"><div class="wrap">
+    body: `<main id="main"><section class="hero stage"><div class="wrap">
 <h1 class="grad">Your README, as an animated diagram</h1>
 <p class="lede">Paste a GitHub repo. Get an animated SVG for the top of its README: your stack, sections and commands, drawn in one picture.</p>
 ${error ? `<p class="error" role="alert">${esc(error)}</p>` : ''}${form(value)}
@@ -102,7 +103,7 @@ export function resultPage(origin, repo, editUrl, { oauth = false } = {}) {
     title: `${repo} diagram · README Diagram`,
     origin,
     path: `/${repo}`,
-    body: `<main><section class="hero stage"><div class="wrap">
+    body: `<main id="main"><section class="hero stage"><div class="wrap">
 <h1 class="grad">${esc(repo)}</h1>
 <p class="lede">Your diagram is ready. Copy the snippet to the top of the README.</p>
 <p id="err" class="error" role="alert" hidden>Could not load a README for ${esc(repo)}. Is the repo public and does it have a README?</p>
@@ -126,7 +127,7 @@ export function donePage(origin, { repo, url, forked, error }) {
   const body = error
     ? `<h1 class="grad">Not this time</h1><p class="lede">${esc(error)}</p><div class="row"><a class="btn" href="/${esc(repo || '')}">Back to the diagram</a></div>`
     : `<h1 class="grad">Pull request opened</h1><p class="lede">${forked ? 'We forked the repo to your account and ' : ''}opened a pull request that adds the diagram to the README of ${esc(repo)}.</p><div class="row"><a class="btn" href="${esc(url)}">View the pull request</a><a class="btn ghost" href="/">Another repo</a></div>`;
-  return layout({ title: error ? 'README Diagram: not this time' : 'README Diagram: pull request opened', origin, path: '/auth/callback', body: `<main><section class="hero stage"><div class="wrap">${body}</div></section></main>` });
+  return layout({ title: error ? 'README Diagram: not this time' : 'README Diagram: pull request opened', origin, path: '/auth/callback', body: `<main id="main"><section class="hero stage"><div class="wrap">${body}</div></section></main>` });
 }
 
 export { parseRepoInput };
