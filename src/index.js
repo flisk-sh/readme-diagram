@@ -20,6 +20,12 @@ export const RENDER_VERSION = '12';
 
 const app = {
   async fetch(request, env = {}, ctx) {
+    // HTTP says HEAD answers the same status and headers as GET, with no body. Uptime monitors and link
+    // checkers probe with HEAD, so route it through the GET handler and drop the body afterwards.
+    if (request.method === 'HEAD') {
+      const res = await app.fetch(new Request(request.url, { method: 'GET', headers: request.headers }), env, ctx);
+      return new Response(null, { status: res.status, statusText: res.statusText, headers: res.headers });
+    }
     const url = new URL(request.url);
     const origin = env.PUBLIC_ORIGIN || url.origin;
 
