@@ -17,3 +17,10 @@ test('HEAD on public routes returns GET headers and no response body', async () 
 test('HEAD does not begin the OAuth flow', async () => {
   assert.equal((await request('/auth/start', { method: 'HEAD' })).status, 404);
 });
+
+test('HEAD on other /auth/ paths routes like GET', async () => {
+  const get = await request('/auth/example.svg');
+  const head = await request('/auth/example.svg', { method: 'HEAD' });
+  assert.equal(head.status, get.status);
+  assert.equal(await head.text(), '');
+});

@@ -109,9 +109,9 @@ export default {
   async fetch(request, env = {}, ctx) {
     if (request.method !== 'HEAD') return withSecurityHeaders(await app.fetch(request, env, ctx));
 
-    // Match the public GET route without starting an OAuth flow.
+    // Match the public GET route; the OAuth endpoints stay GET-only so HEAD never starts a flow.
     const path = new URL(request.url).pathname;
-    const routed = path.startsWith('/auth/') ? request : new Request(request, { method: 'GET' });
+    const routed = (path === '/auth/start' || path === '/auth/callback') ? request : new Request(request, { method: 'GET' });
     const response = await app.fetch(routed, env, ctx);
     await response.body?.cancel();
     return withSecurityHeaders(new Response(null, response));
