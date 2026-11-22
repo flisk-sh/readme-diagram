@@ -167,7 +167,7 @@ test('site: favicon, apple-touch icon and header use the canonical README Diagra
   assert.match(home, /<link rel="icon" href="\/favicon\.ico" sizes="32x32">/);
   assert.match(home, /<link rel="icon" href="\/icon\.svg" type="image\/svg\+xml">/);
   assert.match(home, /<link rel="apple-touch-icon" href="\/apple-touch-icon\.png">/);
-  assert.match(home, /<header[^>]*>.*<img src="\/icon\.svg"[^>]*>README Diagram/);
+  assert.match(home, /<script src="https:\/\/flisk\.si\/assets\/bar\.js" data-product="README Diagram" data-icon="readme-diagram" data-accent="#1f9d6b"/);
 });
 
 test('site: hostile repo path cannot inject into the result page', async () => {
