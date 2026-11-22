@@ -58,6 +58,7 @@ const app = {
     if (url.pathname === '/og.png' && (request.method === 'GET' || request.method === 'HEAD')) {
       return new Response(request.method === 'HEAD' ? null : OG_PNG, { headers: { 'content-type': 'image/png', 'content-length': String(OG_PNG.byteLength), 'cache-control': 'public, max-age=86400' } });
     }
+    if (url.pathname === '/llms.txt') return new Response('# README Diagram\n\n> Render the structure of a GitHub README as an SVG diagram.\n\n## Links\n- [README Diagram](https://diagram.flisk.si/)\n- [Source](https://github.com/flisk-sh/readme-diagram)\n', { headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'public, max-age=86400' } });
     if (url.pathname === '/robots.txt') return new Response(ROBOTS, { headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'public, max-age=86400' } });
     if (url.pathname === '/sitemap.xml') return new Response(SITEMAP, { headers: { 'content-type': 'application/xml; charset=utf-8', 'cache-control': 'public, max-age=86400' } });
     if (url.pathname === '/icon.svg') return new Response(ICON, { headers: { 'content-type': 'image/svg+xml', 'cache-control': 'public, max-age=86400' } });
@@ -107,6 +108,13 @@ const app = {
 
 export default {
   async fetch(request, env = {}, ctx) {
-    return withSecurityHeaders(await app.fetch(request, env, ctx));
+    if (request.method !== 'HEAD') return withSecurityHeaders(await app.fetch(request, env, ctx));
+
+    // Match the public GET route; the OAuth endpoints stay GET-only so HEAD never starts a flow.
+    const path = new URL(request.url).pathname;
+    const routed = (path === '/auth/start' || path === '/auth/callback') ? request : new Request(request, { method: 'GET' });
+    const response = await app.fetch(routed, env, ctx);
+    await response.body?.cancel();
+    return withSecurityHeaders(new Response(null, response));
   },
 };

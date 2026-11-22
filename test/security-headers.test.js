@@ -9,7 +9,7 @@ const EXPECTED = {
   'strict-transport-security': 'max-age=31536000; includeSubDomains',
   'referrer-policy': 'strict-origin-when-cross-origin',
   'permissions-policy': 'camera=(), microphone=(), geolocation=()',
-  'content-security-policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: wss:; media-src 'self' https:; frame-src 'self' https:; worker-src 'self' blob:; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https:",
+  'content-security-policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: wss:; media-src 'self' https:; frame-src 'self' https:; worker-src 'self' blob:; object-src 'none'; frame-ancestors 'self' https://analytics.flisk.si; base-uri 'self'; form-action 'self' https:",
 };
 
 test('home page, ready probe and 404 carry the baseline security headers', async () => {
@@ -22,7 +22,7 @@ test('home page, ready probe and 404 carry the baseline security headers', async
 test('existing headers are kept and a CSP gains frame-ancestors', () => {
   const res = withSecurityHeaders(new Response('x', { headers: { 'x-frame-options': 'DENY', 'content-security-policy': "default-src 'none'" } }));
   assert.equal(res.headers.get('x-frame-options'), 'DENY');
-  assert.equal(res.headers.get('content-security-policy'), "default-src 'none'; frame-ancestors 'self'");
+  assert.equal(res.headers.get('content-security-policy'), "default-src 'none'; frame-ancestors 'self' https://analytics.flisk.si");
   const keep = withSecurityHeaders(new Response('x', { headers: { 'content-security-policy': 'frame-ancestors https://a.example' } }));
   assert.equal(keep.headers.get('content-security-policy'), 'frame-ancestors https://a.example');
 });

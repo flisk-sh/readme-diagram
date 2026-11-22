@@ -28,3 +28,7 @@ npx wrangler@4 secret put GH_CLIENT_SECRET
 ```
 
 `STATE_SECRET` is a random string used to sign the sign-in state (already set on the live Worker; generate your own with `openssl rand -hex 32`).
+
+## License
+
+[MIT](LICENSE)

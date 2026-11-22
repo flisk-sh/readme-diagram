@@ -14,7 +14,7 @@ a{color:var(--accent);text-underline-offset:3px}.wrap{max-width:880px;margin:0 a
 .stage::after{content:"";position:absolute;inset:-10%;background:radial-gradient(38% 32% at 22% 18%,rgba(94,224,160,.30),transparent 70%),radial-gradient(32% 30% at 82% 30%,rgba(31,157,107,.28),transparent 70%),radial-gradient(40% 36% at 55% 95%,rgba(91,124,255,.22),transparent 70%);pointer-events:none}
 .stage>*{position:relative;z-index:1}
 header.top{background:#07080c;border-bottom:1px solid #1d2029}header.top::before,header.top::after{display:none}
-header.top .wrap{max-width:1080px;display:flex;gap:20px;align-items:center;min-height:60px;font-size:15px}header.top .wrap a:nth-child(2){margin-left:auto}
+header.top .wrap{max-width:1080px;display:flex;gap:20px;align-items:center;min-height:60px;font-size:15px}header.top .wrap a:first-child{margin-left:auto}
 header.top a{color:var(--muted);text-decoration:none}header.top a:first-child{color:var(--fg);font-weight:750;font-size:17px;display:flex;gap:10px;align-items:center}header.top img{border-radius:6px}
 .hero{padding:48px 0 64px;text-align:center}
 h1{font-size:clamp(34px,6.5vw,58px);line-height:1.04;letter-spacing:-.04em;font-weight:800;margin:0 auto 16px;max-width:18ch}
@@ -64,8 +64,8 @@ function layout({ title, origin, body, path = '/' }) {
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${esc(origin)}/og.png">
 <style>${CSS}.skip-link{position:absolute;top:0;left:0;z-index:1000;transform:translateY(-120%);background:#fff;color:#111;padding:.5rem 1rem}
 .skip-link:focus{transform:none}
-</style><script defer data-domain="diagram.flisk.si" src="https://flisk.sh/a.js"></script><script src="https://flisk.si/assets/bar.js" defer></script></head><body><a class="skip-link" href="#main-content">Skip to content</a>
-<header class="top stage"><nav class="wrap" aria-label="Site"><a href="/"><img src="/icon.svg" alt="" width="26" height="26">README Diagram</a><a href="https://github.com/flisk-sh/readme-diagram">Source</a></nav></header>
+</style><script defer data-domain="diagram.flisk.si" src="https://flisk.sh/a.js"></script><script src="https://flisk.si/assets/bar.js" data-product="README Diagram" data-icon="readme-diagram" data-accent="#1f9d6b" data-text="Turn any GitHub repo into an architecture diagram for its README." defer></script></head><body><a class="skip-link" href="#main-content">Skip to content</a>
+<header class="top stage"><nav class="wrap" aria-label="Site"><a href="https://github.com/flisk-sh/readme-diagram">Source</a></nav></header>
 ${body}
 <footer><div class="wrap">README Diagram: no AI, no sign-up, nothing stored. <a href="https://github.com/flisk-sh/readme-diagram">Open source</a>, made by <a href="https://flisk.sh">Flisk</a>.</div></footer>
 </body></html>`;
