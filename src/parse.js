@@ -13,23 +13,27 @@ export function parseReadme(md) {
   const fenceLangs = new Set();
   let title = '';
   let tagline = '';
-  let inFence = false;
+  let fenceMarker = '';
   let fenceLang = '';
   let current = null;
 
   for (const raw of lines) {
-    const fence = raw.match(/^\s*(```+|~~~+)\s*([\w+-]*)/);
+    const fence = raw.match(/^\s*(```+|~~~+)/);
     if (fence) {
-      if (inFence) {
-        inFence = false;
-      } else {
-        inFence = true;
-        fenceLang = fence[2].toLowerCase();
+      const marker = fence[1];
+      const info = raw.slice(fence[0].length).trim();
+      if (!fenceMarker) {
+        fenceMarker = marker;
+        fenceLang = (info.match(/^[\w+-]+/)?.[0] || '').toLowerCase();
         if (fenceLang && !SHELL.has(fenceLang)) fenceLangs.add(fenceLang);
+        continue;
       }
-      continue;
+      if (marker[0] === fenceMarker[0] && marker.length >= fenceMarker.length && !info) {
+        fenceMarker = '';
+        continue;
+      }
     }
-    if (inFence) {
+    if (fenceMarker) {
       const line = raw.trim().replace(/^\$\s+/, '');
       if ((SHELL.has(fenceLang) || fenceLang === '') && RUNNABLE.test(line) && !commands.includes(line) && commands.length < 40) {
         commands.push(line);

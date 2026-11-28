@@ -23,6 +23,21 @@ test('parse: ignores headings inside code fences and handles CRLF', () => {
   assert.deepEqual(p.commands, ['npm test']);
 });
 
+for (const [description, outer, inner] of [
+  ['a shorter marker', '````', '```'],
+  ['a different marker', '~~~', '```'],
+  ['a marker with trailing text', '```', '```bash'],
+]) {
+  test(`parse: ${description} does not close a fence`, () => {
+    const p = parseReadme([
+      '# README', `${outer}text`, inner, '## Example heading',
+      ` ${outer}${outer[0]}  `, '## Quick start', '```bash', 'npm test', '```',
+    ].join('\n'));
+    assert.deepEqual(p.sections.map((s) => s.title), ['Quick start']);
+    assert.deepEqual(p.commands, ['npm test']);
+  });
+}
+
 test('parse: empty and non-string input do not throw', () => {
   for (const v of ['', null, undefined]) assert.equal(parseReadme(v).sections.length, 0);
 });
